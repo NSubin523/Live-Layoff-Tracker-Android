@@ -1,5 +1,6 @@
 package com.example.tracklayoff.navigation
 
+import android.app.Activity
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.tracklayoff.core.common.domain.AuthProviderClientType
 import com.example.tracklayoff.core.common.ui.composables.AppAccountDropdownMenu
 import com.example.tracklayoff.core.common.ui.composables.AppBottomNavBar
 import com.example.tracklayoff.core.common.ui.composables.AppLoadingOverlay
@@ -31,6 +33,8 @@ import com.example.tracklayoff.core.common.ui.extension.showAppCustomSnackBar
 import com.example.tracklayoff.core.common.ui.state.AuthenticationState
 import com.example.tracklayoff.designsystems.AppDimens
 import com.example.tracklayoff.features.auth.ui.AuthViewmodel
+import com.example.tracklayoff.features.auth.ui.composable.OtpVerificationInputDialog
+import com.example.tracklayoff.features.auth.ui.composable.PhoneNumberInputDialog
 import com.example.tracklayoff.features.auth.ui.composable.SignInBottomSheet
 import com.example.tracklayoff.features.auth.ui.state.AuthUiEvent
 import com.example.tracklayoff.features.auth.ui.state.AuthUiState
@@ -49,6 +53,7 @@ fun LandingScreen(
     val context = LocalContext.current
     val snackBarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val activity = context as? Activity
 
     val authUiState by authViewModel.authUiState.collectAsState()
     val authenticatedState = authUiState as? AuthUiState.Authenticated
@@ -57,6 +62,10 @@ fun LandingScreen(
     val isSigningOutEvent by authViewModel.isSigningOutLoading.collectAsState()
 
     var selectedTab by remember { mutableStateOf<BottomNavItem>(BottomNavItem.Feed) }
+    var showPhoneInputAlertDialog by remember { mutableStateOf(false) }
+    var showOtpInputDialog by remember { mutableStateOf(false) }
+    var enteredPhoneNumber by remember { mutableStateOf("") }
+    var activeVerificationId by remember { mutableStateOf("") }
 
     NotificationPermissionDialog(
         snackBarState = snackBarHostState,
@@ -79,7 +88,40 @@ fun LandingScreen(
             onDismissRequest = { showSignInSheet = false },
             onSignInClick = { provider ->
                 showSignInSheet = false
-                authViewModel.signIn(providerType = provider, context = context)
+                when(provider) {
+                    AuthProviderClientType.GOOGLE -> {
+                        authViewModel.signIn(providerType = provider, context = context)
+                    }
+                    AuthProviderClientType.PHONE -> {
+                        showPhoneInputAlertDialog = true
+                    }
+                }
+            },
+        )
+    }
+
+    if(showPhoneInputAlertDialog) {
+        PhoneNumberInputDialog(
+            onDismissRequest = { showPhoneInputAlertDialog = false },
+            onSubmitPhoneNumber = { phoneNumber ->
+                showPhoneInputAlertDialog = false
+                enteredPhoneNumber = phoneNumber
+                /** Use phone number later **/
+                showOtpInputDialog = true
+            }
+        )
+    }
+
+    if(showOtpInputDialog) {
+        OtpVerificationInputDialog(
+            phoneNumber = enteredPhoneNumber,
+            onDismissRequest = { showOtpInputDialog = false },
+            onSubmitOtp = { otpCode ->
+                showOtpInputDialog = false
+                authViewModel.signIn(
+                    providerType = AuthProviderClientType.PHONE,
+                    context = context
+                )
             },
         )
     }
