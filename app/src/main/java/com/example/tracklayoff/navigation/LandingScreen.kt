@@ -59,7 +59,14 @@ fun LandingScreen(
     val isSigningOutEvent by authViewModel.isSigningOutLoading.collectAsStateWithLifecycle()
 
     // Survive process death and state configuration
-    var selectedTab by rememberSaveable { mutableStateOf<BottomNavItem>(BottomNavItem.Feed) }
+    var selectedTabRoute by rememberSaveable { mutableStateOf(BottomNavItem.Feed.route) }
+    val selectedTab = remember(selectedTabRoute) {
+        when(selectedTabRoute) {
+            BottomNavItem.Tracker.route -> BottomNavItem.Tracker
+            else -> BottomNavItem.Feed
+        }
+    }
+
     var showSignInSheet by rememberSaveable { mutableStateOf(false) }
     var showDropdownMenu by rememberSaveable { mutableStateOf(false) }
     var showPhoneInputAlertDialog by rememberSaveable { mutableStateOf(false) }
@@ -181,7 +188,7 @@ fun LandingScreen(
         bottomBar = {
             AppBottomNavBar(
                 selectedTab = selectedTab,
-                onTabSelected = { selectedTab = it }
+                onTabSelected = { selectedTabRoute = it.route }
             )
         }
     ) { innerPadding ->
