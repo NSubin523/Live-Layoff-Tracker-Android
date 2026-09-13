@@ -57,4 +57,7 @@ object AppDimens {
 
     val ButtonWidth = 110.dp
     val AppNavbarHeight = 80.dp
+
+    //Phone Input Dialog
+    val PhoneInputDialogHeight = 16.dp
 }
