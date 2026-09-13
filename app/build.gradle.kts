@@ -1,3 +1,5 @@
+import java.util.Properties
+
 // App-level build.gradle.kts
 plugins {
     alias(libs.plugins.android.application)
@@ -8,6 +10,14 @@ plugins {
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
 }
+
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if(file.exists()) {
+        load(file.inputStream())
+    }
+}
+val physicalMacIp = localProperties.getProperty("MAC_IP")
 
 android {
     namespace = "com.example.tracklayoff"
@@ -21,6 +31,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "MAC_IP", "$physicalMacIp")
     }
 
     buildTypes {
