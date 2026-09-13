@@ -10,17 +10,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AccountBox
-import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -32,8 +30,9 @@ import com.example.tracklayoff.features.feed.domain.model.Company
 
 @Composable
 fun LayoffCardItem(
+    modifier: Modifier = Modifier,
     company: Company,
-    modifier: Modifier = Modifier
+    placeholderIcon: Painter
 ) {
     Card(
         modifier = modifier.fillMaxWidth()
@@ -52,7 +51,6 @@ fun LayoffCardItem(
                 .padding(AppDimens.HorizontalPaddingLayoffCard),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val placeholderIcon = rememberVectorPainter(Icons.Outlined.AccountBox)
             AsyncImage(
                 model = company.logoUrl,
                 contentDescription = "${company.companyName} Logo",
@@ -83,10 +81,14 @@ fun LayoffCardItem(
             }
 
             Column(horizontalAlignment = Alignment.End) {
-                StatusPillComponent(status = company.layoffStatus.toString())
+                val status = remember(company.layoffStatus) { company.layoffStatus.toString() }
+                StatusPillComponent(status = status)
                 Spacer(modifier = Modifier.height(AppDimens.SpacingLarge))
+                val impactText = remember(company.impactCount) {
+                    company.impactCount?.let { "$it affected" } ?: "Impact Unknown"
+                }
                 Text(
-                    text = company.impactCount?.let { "$it affected" } ?: "Impact Unknown",
+                    text = impactText,
                     fontSize = AppDimens.CompanyLocationFontSize,
                     fontWeight = FontWeight.Bold,
                     color = if (company.impactCount != null) AppColors.CompanyNameTextColor else AppColors.CompanyLocationTextColor

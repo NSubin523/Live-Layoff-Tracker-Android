@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.googleid)
+    implementation(libs.kotlinx.collections.immutable)
 
     // Asynchronous Concurrent Processing (Coroutines)
     implementation(libs.kotlinx.coroutines.android)

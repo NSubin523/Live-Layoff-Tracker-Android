@@ -1,5 +1,6 @@
 package com.example.tracklayoff.features.feed.domain.model
 
+import androidx.compose.runtime.Immutable
 import java.time.Instant
 
 enum class LayoffStatus {
@@ -10,6 +11,7 @@ enum class TrendDirection {
     INCREASING, DECREASING, STABLE, UNKNOWN
 }
 
+@Immutable
 data class Company (
     val id: String,
     val companyName: String,

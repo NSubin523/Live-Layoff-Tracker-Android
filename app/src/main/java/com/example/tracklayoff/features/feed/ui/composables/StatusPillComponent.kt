@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.example.tracklayoff.designsystems.AppColors
@@ -17,9 +18,11 @@ fun StatusPillComponent(
     status: String,
     modifier: Modifier = Modifier
 ) {
-    val (backgroundColor, textColor) = when(status.uppercase()) {
-        "CONFIRMED" -> White to AppColors.StatusPillConfirmedColor
-        else -> White to AppColors.StatusPillRumoredColor
+    val (backgroundColor, textColor) = remember(status) {
+        when (status.uppercase()) {
+            "CONFIRMED" -> White to AppColors.StatusPillConfirmedColor
+            else -> White to AppColors.StatusPillRumoredColor
+        }
     }
 
     Box(
@@ -31,8 +34,9 @@ fun StatusPillComponent(
             vertical = AppDimens.SpacingStandard
         )
     ) {
+        val displayStatus = remember(status) { status.uppercase() }
         Text(
-            text = status.uppercase(),
+            text = displayStatus,
             color = textColor,
             fontSize = AppDimens.StandardFontSize,
             fontWeight = FontWeight.Bold

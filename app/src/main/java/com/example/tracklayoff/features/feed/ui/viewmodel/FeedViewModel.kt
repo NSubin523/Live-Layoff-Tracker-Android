@@ -10,6 +10,7 @@ import com.example.tracklayoff.features.feed.data.repository.FeedRepository
 import com.example.tracklayoff.features.feed.ui.state.FeedUiEvent
 import com.example.tracklayoff.features.feed.ui.state.FeedUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -110,7 +111,7 @@ class FeedViewModel @Inject constructor(
                         delay(1300)
                         lastFetchTimestamp = System.currentTimeMillis()
                         _uiState.value = FeedUiState.Success(
-                            companies = feedData.data
+                            companies = feedData.data.toImmutableList()
                         )
                     }
                 }
