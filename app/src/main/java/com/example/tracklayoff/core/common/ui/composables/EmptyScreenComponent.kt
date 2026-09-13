@@ -22,11 +22,11 @@ import com.example.tracklayoff.designsystems.AppDimens
 
 @Composable
 fun EmptyScreen(
+    modifier: Modifier = Modifier,
     title: String,
     subtitle: String,
     hasButton: Boolean = false,
-    onClickAction: () -> Unit = {},
-    modifier: Modifier = Modifier
+    onClickAction: () -> Unit = {}
 ) {
     Box(
         modifier = modifier
@@ -46,7 +46,9 @@ fun EmptyScreen(
                 color = AppColors.CompanyNameTextColor,
                 textAlign = TextAlign.Center
             )
-            Spacer(modifier = modifier.height(AppDimens.SpacingLarge))
+
+            Spacer(modifier = Modifier.height(AppDimens.SpacingLarge))
+
             Text(
                 text = subtitle,
                 fontSize = AppDimens.CompanyLocationFontSize,
@@ -54,10 +56,11 @@ fun EmptyScreen(
                 textAlign = TextAlign.Center
             )
             if(hasButton) {
-                Spacer(modifier.height(AppDimens.SpacingXxl))
+                Spacer(Modifier.height(AppDimens.SpacingXxl))
+
                 Button(
                     onClick = onClickAction,
-                    modifier = modifier
+                    modifier = Modifier
                         .width(AppDimens.ButtonWidth)
                         .height(AppDimens.GoogleSignInBtnHeight)
                 ) {

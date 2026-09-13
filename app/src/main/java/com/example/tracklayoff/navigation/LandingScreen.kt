@@ -1,6 +1,5 @@
 package com.example.tracklayoff.navigation
 
-import android.app.Activity
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
@@ -12,16 +11,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tracklayoff.core.common.domain.AuthProviderClientType
 import com.example.tracklayoff.core.common.ui.composables.AppAccountDropdownMenu
 import com.example.tracklayoff.core.common.ui.composables.AppBottomNavBar
@@ -53,19 +53,27 @@ fun LandingScreen(
     val context = LocalContext.current
     val snackBarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
-    val activity = context as? Activity
 
-    val authUiState by authViewModel.authUiState.collectAsState()
-    val authenticatedState = authUiState as? AuthUiState.Authenticated
-    var showSignInSheet by remember { mutableStateOf(false) }
-    var showDropdownMenu by remember { mutableStateOf(false) }
-    val isSigningOutEvent by authViewModel.isSigningOutLoading.collectAsState()
+    // Lifecycle aware state collection
+    val authUiState by authViewModel.authUiState.collectAsStateWithLifecycle()
+    val isSigningOutEvent by authViewModel.isSigningOutLoading.collectAsStateWithLifecycle()
 
-    var selectedTab by remember { mutableStateOf<BottomNavItem>(BottomNavItem.Feed) }
-    var showPhoneInputAlertDialog by remember { mutableStateOf(false) }
-    var showOtpInputDialog by remember { mutableStateOf(false) }
-    var enteredPhoneNumber by remember { mutableStateOf("") }
-    var activeVerificationId by remember { mutableStateOf("") }
+    // Survive process death and state configuration
+    var selectedTab by rememberSaveable { mutableStateOf<BottomNavItem>(BottomNavItem.Feed) }
+    var showSignInSheet by rememberSaveable { mutableStateOf(false) }
+    var showDropdownMenu by rememberSaveable { mutableStateOf(false) }
+    var showPhoneInputAlertDialog by rememberSaveable { mutableStateOf(false) }
+    var showOtpInputDialog by rememberSaveable { mutableStateOf(false) }
+    var enteredPhoneNumber by rememberSaveable { mutableStateOf("") }
+
+    // Stabilizing composite param to allow CustomTopAppbar to skip composition when not needed
+    val authenticationState = remember(authUiState) {
+        val authenticated = authUiState as? AuthUiState.Authenticated
+        AuthenticationState(
+            isAuthenticated = authenticated != null,
+            photoUrl = authenticated?.appUser?.photoUrl
+        )
+    }
 
     NotificationPermissionDialog(
         snackBarState = snackBarHostState,
@@ -132,10 +140,7 @@ fun LandingScreen(
                 modifier = Modifier.fillMaxWidth()
             ){
                 CustomTopAppBar(
-                    authenticationState = AuthenticationState(
-                        isAuthenticated = authenticatedState != null,
-                        photoUrl = authenticatedState?.appUser?.photoUrl
-                    ),
+                    authenticationState = authenticationState,
                     onProfileClick = {
                         when(authUiState) {
                             is AuthUiState.Authenticated -> showDropdownMenu = true

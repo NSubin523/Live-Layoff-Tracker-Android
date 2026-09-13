@@ -39,7 +39,7 @@ fun SignInBottomSheetContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -47,14 +47,14 @@ fun SignInBottomSheetContent(
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = AppDimens.AuthBottomSheetSpacingTitle)
             )
 
             IconButton(
                 onClick = onDismissRequest,
-                modifier = modifier.align(Alignment.CenterEnd)
+                modifier = Modifier.align(Alignment.CenterEnd)
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
@@ -63,7 +63,7 @@ fun SignInBottomSheetContent(
             }
         }
 
-        Spacer(modifier = modifier.height(AppDimens.SpacingLarge))
+        Spacer(modifier = Modifier.height(AppDimens.SpacingLarge))
 
         Text(
             text = "Access personalized layoff alerts, and set preferences",
@@ -71,22 +71,22 @@ fun SignInBottomSheetContent(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        Spacer(modifier = modifier.height(AppDimens.AuthBottomSheetBottomSpacing))
+        Spacer(modifier = Modifier.height(AppDimens.AuthBottomSheetBottomSpacing))
 
         Button(
             onClick = { onSignInClick(AuthProviderClientType.GOOGLE) },
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(AppDimens.GoogleSignInBtnHeight)
         ) {
             Text(text = "Sign in with Google")
         }
 
-        Spacer(modifier = modifier.height(AppDimens.AuthBottomSheetBottomSpacing))
+        Spacer(modifier = Modifier.height(AppDimens.AuthBottomSheetBottomSpacing))
 
         Button(
             onClick = { onSignInClick(AuthProviderClientType.PHONE) } ,
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(AppDimens.GoogleSignInBtnHeight)
         ) {
