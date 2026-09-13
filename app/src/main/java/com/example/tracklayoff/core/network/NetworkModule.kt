@@ -21,8 +21,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val PHYSICAL_MAC_IP = "192.168.4.175"
-
     @Provides
     @Singleton
     fun provideBaseUrl(): String {
@@ -31,7 +29,7 @@ object NetworkModule {
             return BuildConfig.BASE_URL
         }
         // If debug build, dynamically pick 10.0.2.2 vs 192.168.1.149!
-        return DeviceDetector.getDynamicBaseUrl(PHYSICAL_MAC_IP)
+        return DeviceDetector.getDynamicBaseUrl(BuildConfig.MAC_IP)
     }
 
     @Provides

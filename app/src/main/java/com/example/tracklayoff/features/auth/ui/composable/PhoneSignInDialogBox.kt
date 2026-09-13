@@ -10,9 +10,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
@@ -33,14 +35,22 @@ fun PhoneNumberInputDialog(
     onSubmitPhoneNumber: (String) -> Unit
 ) {
     var phoneNumber by remember { mutableStateOf("") }
-    val isValidPhoneNumber = phoneNumber.trim().length >= MAX_PH_LEN
+    val isValidPhoneNumber by remember {
+        derivedStateOf { phoneNumber.trim().length >= MAX_PH_LEN }
+    }
+
+    val currentPhoneNumber by rememberUpdatedState(phoneNumber)
+    val onConfirm = remember(onSubmitPhoneNumber) {
+        { onSubmitPhoneNumber(currentPhoneNumber.trim()) }
+    }
 
     AppAlertDialog(
+        modifier = modifier,
         title = PhoneDialogHeader,
         confirmButtonText = PhoneDialogSendCode,
         isConfirmEnabled = isValidPhoneNumber,
         onDismissRequest = onDismissRequest,
-        onConfirmClick = { onSubmitPhoneNumber(phoneNumber.trim()) }
+        onConfirmClick = onConfirm
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
@@ -71,7 +81,7 @@ fun PhoneNumberInputDialog(
                         }
                     }
                 ),
-                modifier = modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
