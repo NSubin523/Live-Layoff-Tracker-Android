@@ -1,6 +1,7 @@
 package com.example.tracklayoff.features.feed.domain.mapper
 
 import com.example.tracklayoff.features.feed.data.dto.LayoffResponseDto
+import com.example.tracklayoff.features.feed.data.local.entity.CompanyEntity
 import com.example.tracklayoff.features.feed.domain.model.Company
 import com.example.tracklayoff.features.feed.domain.model.LayoffStatus
 import com.example.tracklayoff.features.feed.domain.model.TrendDirection
@@ -37,5 +38,51 @@ fun LayoffResponseDto.toDomain(): Company {
         reportedAt = parsedInstant,
         logoUrl = this.logoUrl,
         trendDirection = mappedTrend
+    )
+}
+
+fun LayoffResponseDto.toEntity(): CompanyEntity {
+    val epochMillis = try {
+        Instant.parse(reportedAt).toEpochMilli()
+    } catch (e: DateTimeParseException) {
+        System.currentTimeMillis()
+    }
+
+    return CompanyEntity(
+        id = companyId,
+        companyName = companyName,
+        impactCount = impactCount,
+        layoffStatus = this.layoffStatus,
+        industry = industry,
+        location = location,
+        reportedAt = epochMillis,
+        logoUrl = logoUrl,
+        trendDirection = trendDirection.uppercase(),
+    )
+}
+
+fun CompanyEntity.toDomain(): Company {
+    val statusEnum = try {
+        LayoffStatus.valueOf(layoffStatus)
+    } catch (e: IllegalArgumentException) {
+        LayoffStatus.UNKNOWN
+    }
+
+    val trendEnum = try {
+        TrendDirection.valueOf(trendDirection)
+    } catch (e: IllegalArgumentException) {
+        TrendDirection.UNKNOWN
+    }
+
+    return Company(
+        id = id,
+        companyName = companyName,
+        impactCount = impactCount,
+        layoffStatus = statusEnum,
+        industry = industry,
+        location = location,
+        reportedAt = Instant.ofEpochMilli(reportedAt),
+        logoUrl = logoUrl,
+        trendDirection = trendEnum
     )
 }
