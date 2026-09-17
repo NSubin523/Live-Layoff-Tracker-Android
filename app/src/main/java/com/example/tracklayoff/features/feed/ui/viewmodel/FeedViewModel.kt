@@ -11,14 +11,16 @@ import com.example.tracklayoff.features.feed.ui.state.FeedUiEvent
 import com.example.tracklayoff.features.feed.ui.state.FeedUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,14 +33,30 @@ class FeedViewModel @Inject constructor(
     private var lastFetchTimestamp: Long = 0L
     private val refreshThresholdMillis = 5 * 60 * 1000L
 
-    private val _uiState = MutableStateFlow<FeedUiState>(FeedUiState.Loading)
-    val uiState: StateFlow<FeedUiState> = _uiState.asStateFlow()
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing : StateFlow<Boolean> = _isRefreshing.asStateFlow()
+
+    private val _isLoading = MutableStateFlow(false)
+    private val _networkError = MutableStateFlow<String?>(null)
+
+    val uiState: StateFlow<FeedUiState> = combine(
+        feedRepository.companiesStream,
+        _isLoading,
+        _networkError
+    ) { companies, isLoading, error ->
+        when {
+            companies.isEmpty() && isLoading -> FeedUiState.Loading
+            companies.isEmpty() && error != null -> FeedUiState.Error(error)
+            else -> FeedUiState.Success(companies.toImmutableList())
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = FeedUiState.Loading
+    )
 
     private val _uiEvent = MutableSharedFlow<FeedUiEvent>()
     val uiEvent: SharedFlow<FeedUiEvent> = _uiEvent.asSharedFlow()
-
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing : StateFlow<Boolean> = _isRefreshing.asStateFlow()
 
     init {
         observeNetworkTransition()
@@ -88,35 +106,20 @@ class FeedViewModel @Inject constructor(
             if (isPullToRefresh) {
                 _isRefreshing.value = true
             } else {
-                _uiState.value = FeedUiState.Loading
+                _isLoading.value = true
             }
+            _networkError.value = null
 
             try {
-                val feedData = feedRepository.getFeed()
-
-                when (feedData) {
-                    is NetworkResult.Error -> {
-                        _uiState.value = FeedUiState.Error(
-                            error = feedData.message.toString()
-                        )
-                    }
-
-                    NetworkResult.Loading -> {
-                        if (!isPullToRefresh) {
-                            _uiState.value = FeedUiState.Loading
-                        }
-                    }
-
-                    is NetworkResult.Success -> {
-                        delay(1300)
-                        lastFetchTimestamp = System.currentTimeMillis()
-                        _uiState.value = FeedUiState.Success(
-                            companies = feedData.data.toImmutableList()
-                        )
-                    }
+                val result = feedRepository.getFeed()
+                if (result is NetworkResult.Error) {
+                    _networkError.value = result.message.toString()
+                } else if (result is NetworkResult.Success) {
+                    lastFetchTimestamp = System.currentTimeMillis()
                 }
             } finally {
                 _isRefreshing.value = false
+                _isLoading.value = false
             }
         }
     }

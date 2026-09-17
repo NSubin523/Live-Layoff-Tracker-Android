@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.room.compiler.plugin)
 }
 
 val localProperties = Properties().apply {
@@ -60,6 +61,10 @@ android {
 
     kotlinOptions {
         jvmTarget = "17"
+    }
+
+    room {
+        schemaDirectory("$projectDir/schemas")
     }
 }
 
