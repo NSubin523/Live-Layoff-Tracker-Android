@@ -2,7 +2,6 @@ package com.example.tracklayoff.core.network
 
 import com.example.tracklayoff.BuildConfig
 import com.example.tracklayoff.core.common.util.DeviceDetector
-import com.example.tracklayoff.features.auth.domain.AuthRepository
 import com.example.tracklayoff.features.feed.data.remote.FeedApiService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
@@ -23,13 +22,22 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideBaseUrl(): String {
-        // If release build, return production server URL
+    @LayoffTrackerBaseUrl
+    fun provideLayoffTrackerBaseUrl(): String {
         if (!BuildConfig.DEBUG) {
             return BuildConfig.BASE_URL
         }
-        // If debug build, dynamically pick 10.0.2.2 vs 192.168.1.149!
-        return DeviceDetector.getDynamicBaseUrl(BuildConfig.MAC_IP)
+        return DeviceDetector.getDynamicBaseUrl(BuildConfig.MAC_IP, port = 8000)
+    }
+
+    @Provides
+    @Singleton
+    @FavoritesBaseUrl
+    fun provideFavoritesBaseUrl(): String {
+        if (!BuildConfig.DEBUG) {
+            return BuildConfig.FAVORITES_BASE_URL
+        }
+        return DeviceDetector.getDynamicBaseUrl(BuildConfig.MAC_IP, port = 8081)
     }
 
     @Provides
@@ -62,7 +70,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(baseUrl: String, okHttpClient: OkHttpClient): Retrofit {
+    @LayoffTrackerRetrofit
+    fun provideLayoffTrackerRetrofit(@LayoffTrackerBaseUrl baseUrl: String, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)
@@ -72,7 +81,18 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideFeedApiService(retrofit: Retrofit): FeedApiService {
+    @FavoritesRetrofit
+    fun provideFavoritesRetrofit(@FavoritesBaseUrl baseUrl: String, okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFeedApiService(@LayoffTrackerRetrofit retrofit: Retrofit): FeedApiService {
         return retrofit.create(FeedApiService::class.java)
     }
 

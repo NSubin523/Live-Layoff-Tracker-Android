@@ -1,5 +1,6 @@
 package com.example.tracklayoff.features.reporting.di
 
+import com.example.tracklayoff.core.network.LayoffTrackerRetrofit
 import com.example.tracklayoff.features.reporting.data.api.ReportingApiService
 import com.example.tracklayoff.features.reporting.domain.CentralTelemetryInterface
 import com.example.tracklayoff.features.reporting.domain.TelemetryImplementation
@@ -18,7 +19,7 @@ abstract class TelemetryModule {
     companion object {
         @Provides
         @Singleton
-        fun provideTelemetryApiService(retrofit: Retrofit): ReportingApiService {
+        fun provideTelemetryApiService(@LayoffTrackerRetrofit retrofit: Retrofit): ReportingApiService {
             return retrofit.create(ReportingApiService::class.java)
         }
     }

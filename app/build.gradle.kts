@@ -38,6 +38,7 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "BASE_URL", "\"http://192.168.1.149:8000/api/v1/\"")
+            buildConfigField("String", "FAVORITES_BASE_URL", "\"http://192.168.1.149:8081/api/v1/\"")
         }
         release {
             isMinifyEnabled = false
@@ -46,6 +47,7 @@ android {
                 "proguard-rules.pro"
             )
             buildConfigField("String", "BASE_URL", "")
+            buildConfigField("String", "FAVORITES_BASE_URL", "")
         }
     }
 
