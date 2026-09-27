@@ -1,0 +1,16 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/subinneupane/AndroidStudioProjects/TrackLayoff/feature/feed/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11399334181341269394.xml:2:13-83
+INJECTED from /Users/subinneupane/AndroidStudioProjects/TrackLayoff/feature/feed/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11399334181341269394.xml:2:13-83
+	package
+		INJECTED from /Users/subinneupane/AndroidStudioProjects/TrackLayoff/feature/feed/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11399334181341269394.xml
+	xmlns:android
+		ADDED from /Users/subinneupane/AndroidStudioProjects/TrackLayoff/feature/feed/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11399334181341269394.xml:2:23-81
+uses-sdk
+INJECTED from /Users/subinneupane/AndroidStudioProjects/TrackLayoff/feature/feed/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11399334181341269394.xml reason: use-sdk injection requested
+INJECTED from /Users/subinneupane/AndroidStudioProjects/TrackLayoff/feature/feed/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11399334181341269394.xml
+INJECTED from /Users/subinneupane/AndroidStudioProjects/TrackLayoff/feature/feed/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11399334181341269394.xml
+	android:targetSdkVersion
+		INJECTED from /Users/subinneupane/AndroidStudioProjects/TrackLayoff/feature/feed/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11399334181341269394.xml
+	android:minSdkVersion
+		INJECTED from /Users/subinneupane/AndroidStudioProjects/TrackLayoff/feature/feed/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest11399334181341269394.xml

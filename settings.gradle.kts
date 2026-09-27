@@ -24,3 +24,12 @@ dependencyResolutionManagement {
 
 rootProject.name = "TrackLayoff"
 include(":app")
+include(":core:designsystem")
+include(":core:common")
+include(":core:network")
+include(":core:database")
+include(":feature:feed")
+include(":feature:auth")
+include(":feature:tracker")
+include(":feature:reporting")
+include(":feature:notifications")

@@ -1,0 +1,6 @@
+com.example.tracklayoff.feature.notifications
+mipmap ic_app_icon
+mipmap ic_app_icon_foreground
+mipmap ic_app_icon_round
+mipmap ic_launcher
+mipmap ic_launcher_round

@@ -71,6 +71,17 @@ android {
 }
 
 dependencies {
+    // Project Sub-Modules
+    implementation(project(":core:designsystem"))
+    implementation(project(":core:common"))
+    implementation(project(":core:network"))
+    implementation(project(":core:database"))
+    implementation(project(":feature:feed"))
+    implementation(project(":feature:auth"))
+    implementation(project(":feature:tracker"))
+    implementation(project(":feature:reporting"))
+    implementation(project(":feature:notifications"))
+
     // AndroidX Core and Android Runtime Lifecycle Primitives
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

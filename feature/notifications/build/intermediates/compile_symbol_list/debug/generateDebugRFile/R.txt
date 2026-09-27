@@ -1,0 +1,5 @@
+int mipmap ic_app_icon 0x0
+int mipmap ic_app_icon_foreground 0x0
+int mipmap ic_app_icon_round 0x0
+int mipmap ic_launcher 0x0
+int mipmap ic_launcher_round 0x0
