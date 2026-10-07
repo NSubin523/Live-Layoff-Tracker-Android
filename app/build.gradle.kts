@@ -77,6 +77,7 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:database"))
     implementation(project(":feature:feed"))
+    implementation(project(":feature:chat-ai"))
     implementation(project(":feature:auth"))
     implementation(project(":feature:tracker"))
     implementation(project(":feature:reporting"))

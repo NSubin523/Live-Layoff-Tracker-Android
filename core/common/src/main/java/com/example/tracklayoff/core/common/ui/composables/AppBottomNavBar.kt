@@ -16,7 +16,7 @@ fun AppBottomNavBar(
     modifier: Modifier = Modifier,
     selectedTab: BottomNavItem,
     onTabSelected: (BottomNavItem) -> Unit,
-    items: List<BottomNavItem> = listOf(BottomNavItem.Feed, BottomNavItem.Tracker),
+    items: List<BottomNavItem> = listOf(BottomNavItem.Feed, BottomNavItem.Tracker, BottomNavItem.ChatAi),
 ) {
     NavigationBar(
         modifier = modifier.height(AppDimens.AppNavbarHeight)

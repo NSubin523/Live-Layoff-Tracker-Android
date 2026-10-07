@@ -36,4 +36,11 @@ sealed class BottomNavItem(
         unselectedIcon = BottomNavIconType.ImageType(R.drawable.ic_analytics)
     )
 
+    object ChatAi : BottomNavItem(
+        route = "chat_ai",
+        title = "Chat AI",
+        selectedIcon = BottomNavIconType.ImageType(R.drawable.ic_chat),
+        unselectedIcon = BottomNavIconType.ImageType(R.drawable.ic_chat)
+    )
+
 }
