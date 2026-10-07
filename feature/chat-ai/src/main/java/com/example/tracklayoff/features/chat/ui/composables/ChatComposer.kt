@@ -8,6 +8,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -22,6 +25,7 @@ internal fun ChatComposer(
     enabled: Boolean,
     canSend: Boolean,
     validationError: ChatFailure?,
+    onTextFieldBoundsChanged: (Rect) -> Unit,
     onDraftChanged: (String) -> Unit,
     onSend: () -> Unit
 ) {
@@ -32,7 +36,9 @@ internal fun ChatComposer(
             OutlinedTextField(
                 value = draft,
                 onValueChange = onDraftChanged,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).onGloballyPositioned {
+                    onTextFieldBoundsChanged(it.boundsInRoot())
+                },
                 enabled = enabled,
                 placeholder = { Text("Ask about layoffs…") },
                 shape = RoundedCornerShape(24.dp),

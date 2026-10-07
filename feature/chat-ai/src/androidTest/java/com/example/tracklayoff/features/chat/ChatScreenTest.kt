@@ -7,11 +7,13 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.tracklayoff.features.chat.domain.model.ChatFailure
+import com.example.tracklayoff.features.chat.domain.model.ChatReplyUpdate
 import com.example.tracklayoff.features.chat.domain.model.ChatRole
 import com.example.tracklayoff.features.chat.ui.composables.ChatGuestContent
 import com.example.tracklayoff.features.chat.ui.composables.ChatScreen
 import com.example.tracklayoff.features.chat.ui.state.*
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
@@ -82,6 +84,64 @@ class ChatScreenTest {
         compose.onNodeWithText("Meta has reported layoffs affecting 3,000 workers.").assertIsDisplayed()
         compose.onNodeWithText("The connection ended before this reply finished.").assertIsDisplayed()
         capture("chat-reply")
+    }
+
+    @Test fun sendingFromOlderHistoryScrollsToNewTurnButLaterChunksRespectScrolling() {
+        val reducer = ChatStateReducer()
+        val state = mutableStateOf(ChatUiState(
+            history = ChatLoadState.Ready,
+            draft = "New prompt",
+            messages = (0 until 20).map {
+                ChatMessageUiModel("history-$it", ChatRole.USER, "History entry $it")
+            }.toImmutableList()
+        ))
+        compose.setContent { MaterialTheme {
+            ChatScreen(state.value) { action ->
+                if (action == ChatAction.SendClicked) {
+                    state.value = reducer.reduce(state.value, ChatStateChange.ReplyUpdated(
+                        ChatReplyUpdate.Started(state.value.draft), "new-user", "new-assistant"
+                    ))
+                }
+            }
+        } }
+
+        compose.onNode(hasScrollAction()).performScrollToIndex(15)
+        compose.onNodeWithText("Latest messages ↓").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Send message").performClick()
+        compose.onNodeWithText("New prompt").assertIsDisplayed()
+        compose.onNodeWithText("Thinking…").assertIsDisplayed()
+        compose.onNodeWithText("Latest messages ↓").assertDoesNotExist()
+
+        compose.onNode(hasScrollAction()).performScrollToIndex(15)
+        compose.onNodeWithText("History entry 6").assertIsDisplayed()
+        compose.runOnIdle {
+            state.value = reducer.reduce(state.value, ChatStateChange.ReplyUpdated(
+                ChatReplyUpdate.TextDelta("A streamed reply"), "new-user", "new-assistant"
+            ))
+        }
+        compose.onNodeWithText("History entry 6").assertIsDisplayed()
+        compose.onNodeWithText("Latest messages ↓").assertIsDisplayed()
+    }
+
+    @Test fun outsideTapClearsFocusWhileComposerAndSendStillWork() {
+        var sent = false
+        compose.setContent { MaterialTheme {
+            ChatScreen(ChatUiState(
+                history = ChatLoadState.Ready,
+                draft = "A draft",
+                messages = persistentListOf(ChatMessageUiModel("reply", ChatRole.ASSISTANT, "Tap this reply"))
+            )) { if (it == ChatAction.SendClicked) sent = true }
+        } }
+        val input = compose.onNode(hasSetTextAction())
+        input.performClick().assertIsFocused()
+        input.performTouchInput { click() }.assertIsFocused()
+        compose.onNodeWithText("Tap this reply").performTouchInput { click() }
+        input.assertIsNotFocused()
+
+        input.performClick().assertIsFocused()
+        compose.onNodeWithContentDescription("Send message").performClick()
+        input.assertIsNotFocused()
+        assertTrue(sent)
     }
 
     private fun capture(name: String) {

@@ -1,4 +1,0 @@
-R_DEF: Internal format may change without notice
-local
-drawable ic_analytics
-drawable ic_analytics_filled

@@ -3,15 +3,21 @@ package com.example.tracklayoff.features.chat.ui.composables
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.unit.dp
 import com.example.tracklayoff.features.chat.ui.mapper.toDisplayMessage
 import com.example.tracklayoff.features.chat.ui.state.*
 
 @Composable
 fun ChatScreen(state: ChatUiState, onAction: (ChatAction) -> Unit) {
-    Column(Modifier.fillMaxSize().imePadding()) {
+    var textFieldBounds by remember { mutableStateOf<Rect?>(null) }
+    Column(Modifier.fillMaxSize().imePadding().dismissKeyboardOnOutsideTap(textFieldBounds)) {
         Box(Modifier.weight(1f).fillMaxWidth()) {
             when (val history = state.history) {
                 ChatLoadState.NotLoaded, ChatLoadState.Loading -> {
@@ -42,6 +48,7 @@ fun ChatScreen(state: ChatUiState, onAction: (ChatAction) -> Unit) {
             enabled = state.history == ChatLoadState.Ready,
             canSend = state.canSend,
             validationError = state.validationError,
+            onTextFieldBoundsChanged = { textFieldBounds = it },
             onDraftChanged = { onAction(ChatAction.DraftChanged(it)) },
             onSend = { onAction(ChatAction.SendClicked) }
         )

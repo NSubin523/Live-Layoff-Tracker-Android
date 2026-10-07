@@ -36,7 +36,14 @@ internal fun ChatMessageList(state: ChatUiState, onLoadOlder: () -> Unit) {
         }.distinctUntilChanged().filter { it }.collect { currentLoadOlder() }
     }
 
-    LaunchedEffect(newest?.id, newest?.text, newest?.status) {
+    // A submitted turn adds a new reply row. Always bring that turn into view,
+    // even if stable lazy-list keys preserve the user's previous scroll position.
+    // Prepending history and streaming deltas leave the newest row ID unchanged.
+    LaunchedEffect(newest?.id) {
+        if (newest != null) listState.scrollToItem(0)
+    }
+
+    LaunchedEffect(newest?.text, newest?.status) {
         if (nearBottom && !listState.isScrollInProgress) listState.scrollToItem(0)
     }
 
