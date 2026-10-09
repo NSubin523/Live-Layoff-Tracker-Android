@@ -1,2 +1,0 @@
-int drawable ic_analytics 0x0
-int drawable ic_analytics_filled 0x0

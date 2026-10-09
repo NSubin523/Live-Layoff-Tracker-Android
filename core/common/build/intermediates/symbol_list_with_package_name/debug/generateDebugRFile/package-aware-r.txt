@@ -1,3 +1,0 @@
-com.example.tracklayoff.core.common
-drawable ic_analytics
-drawable ic_analytics_filled
