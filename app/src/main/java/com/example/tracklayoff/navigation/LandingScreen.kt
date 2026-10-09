@@ -33,9 +33,9 @@ import com.example.tracklayoff.core.common.ui.composables.ObserveAppEvent
 import com.example.tracklayoff.core.common.ui.extension.showAppCustomSnackBar
 import com.example.tracklayoff.core.common.ui.state.AuthenticationState
 import com.example.tracklayoff.designsystems.AppDimens
+import com.example.tracklayoff.features.auth.ui.PhoneAuthViewModel
+import com.example.tracklayoff.features.auth.ui.composable.PhoneSignInContent
 import com.example.tracklayoff.features.auth.ui.AuthViewmodel
-import com.example.tracklayoff.features.auth.ui.composable.OtpVerificationInputDialog
-import com.example.tracklayoff.features.auth.ui.composable.PhoneNumberInputDialog
 import com.example.tracklayoff.features.auth.ui.composable.SignInBottomSheet
 import com.example.tracklayoff.features.auth.ui.state.AuthUiEvent
 import com.example.tracklayoff.features.auth.ui.state.AuthUiState
@@ -52,7 +52,8 @@ import com.example.tracklayoff.designsystems.AppTopBarText
 @Composable
 fun LandingScreen(
     telemetry: CentralTelemetryInterface,
-    authViewModel: AuthViewmodel = hiltViewModel()
+    authViewModel: AuthViewmodel = hiltViewModel(),
+    phoneAuthViewModel: PhoneAuthViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val snackBarHostState = remember { SnackbarHostState() }
@@ -74,9 +75,7 @@ fun LandingScreen(
 
     var showSignInSheet by rememberSaveable { mutableStateOf(false) }
     var showDropdownMenu by rememberSaveable { mutableStateOf(false) }
-    var showPhoneInputAlertDialog by rememberSaveable { mutableStateOf(false) }
-    var showOtpInputDialog by rememberSaveable { mutableStateOf(false) }
-    var enteredPhoneNumber by rememberSaveable { mutableStateOf("") }
+    val phoneState by phoneAuthViewModel.state.collectAsStateWithLifecycle()
 
     // Stabilizing composite param to allow CustomTopAppbar to skip composition when not needed
     val authenticationState = remember(authUiState) {
@@ -113,38 +112,19 @@ fun LandingScreen(
                         authViewModel.signIn(providerType = provider, context = context)
                     }
                     AuthProviderClientType.PHONE -> {
-                        showPhoneInputAlertDialog = true
+                        phoneAuthViewModel.open()
                     }
                 }
             },
         )
     }
 
-    if(showPhoneInputAlertDialog) {
-        PhoneNumberInputDialog(
-            onDismissRequest = { showPhoneInputAlertDialog = false },
-            onSubmitPhoneNumber = { phoneNumber ->
-                showPhoneInputAlertDialog = false
-                enteredPhoneNumber = phoneNumber
-                /** Use phone number later **/
-                showOtpInputDialog = true
-            }
-        )
-    }
-
-    if(showOtpInputDialog) {
-        OtpVerificationInputDialog(
-            phoneNumber = enteredPhoneNumber,
-            onDismissRequest = { showOtpInputDialog = false },
-            onSubmitOtp = { otpCode ->
-                showOtpInputDialog = false
-                authViewModel.signIn(
-                    providerType = AuthProviderClientType.PHONE,
-                    context = context
-                )
-            },
-        )
-    }
+    PhoneSignInContent(
+        state = phoneState,
+        onDismiss = phoneAuthViewModel::dismiss,
+        onSendCode = { phoneAuthViewModel.sendCode(context, it) },
+        onVerify = phoneAuthViewModel::verify
+    )
 
     Scaffold(
         topBar = {

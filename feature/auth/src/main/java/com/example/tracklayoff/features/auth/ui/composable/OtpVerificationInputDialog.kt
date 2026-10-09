@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import com.example.tracklayoff.features.auth.domain.PhoneInput
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,10 +31,12 @@ fun OtpVerificationInputDialog(
     modifier: Modifier = Modifier,
     phoneNumber: String,
     onDismissRequest: () -> Unit,
-    onSubmitOtp: (String) -> Unit
+    onSubmitOtp: (String) -> Unit,
+    error: String? = null,
+    isVerifying: Boolean = false
 ) {
     var otpCode by remember { mutableStateOf("") }
-    val isOtpValid = otpCode.trim().length >= OTP_LEN
+    val isOtpValid = PhoneInput.isValidCode(otpCode) && !isVerifying
 
     AppAlertDialog(
         title = OtpVerificationHeader,
@@ -59,6 +62,9 @@ fun OtpVerificationInputDialog(
                     }
                 },
                 placeholder = { Text(OtpDialogPlaceHolderText) },
+                enabled = !isVerifying,
+                isError = error != null,
+                supportingText = { if (error != null) Text(error) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.NumberPassword,

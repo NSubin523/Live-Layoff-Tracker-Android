@@ -57,19 +57,19 @@ fun LayoffResponseDto.toEntity(): CompanyEntity {
         location = location,
         reportedAt = epochMillis,
         logoUrl = logoUrl,
-        trendDirection = trendDirection.uppercase(),
+        trendDirection = trendDirection.uppercase(java.util.Locale.ROOT),
     )
 }
 
 fun CompanyEntity.toDomain(): Company {
     val statusEnum = try {
-        LayoffStatus.valueOf(layoffStatus)
+        LayoffStatus.valueOf(layoffStatus.uppercase(java.util.Locale.ROOT))
     } catch (e: IllegalArgumentException) {
         LayoffStatus.UNKNOWN
     }
 
     val trendEnum = try {
-        TrendDirection.valueOf(trendDirection)
+        TrendDirection.valueOf(trendDirection.uppercase(java.util.Locale.ROOT))
     } catch (e: IllegalArgumentException) {
         TrendDirection.UNKNOWN
     }

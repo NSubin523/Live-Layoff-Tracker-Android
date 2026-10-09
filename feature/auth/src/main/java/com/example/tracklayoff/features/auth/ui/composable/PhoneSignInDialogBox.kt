@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import com.example.tracklayoff.features.auth.domain.PhoneInput
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -32,11 +33,13 @@ const val MAX_PH_LEN = 10
 fun PhoneNumberInputDialog(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
-    onSubmitPhoneNumber: (String) -> Unit
+    onSubmitPhoneNumber: (String) -> Unit,
+    error: String? = null,
+    isSending: Boolean = false
 ) {
     var phoneNumber by remember { mutableStateOf("") }
-    val isValidPhoneNumber by remember {
-        derivedStateOf { phoneNumber.trim().length >= MAX_PH_LEN }
+    val isValidPhoneNumber by remember(isSending) {
+        derivedStateOf { PhoneInput.normalize(phoneNumber) != null && !isSending }
     }
 
     val currentPhoneNumber by rememberUpdatedState(phoneNumber)
@@ -64,11 +67,14 @@ fun PhoneNumberInputDialog(
             OutlinedTextField(
                 value = phoneNumber,
                 onValueChange = { input ->
-                    if (input.all { it.isDigit() || it == '+' }) {
+                    if (input.all { it in "0123456789+ -()." }) {
                         phoneNumber = input
                     }
                 },
                 placeholder = { Text(PhoneDialogContentPlaceholder) },
+                enabled = !isSending,
+                isError = error != null,
+                supportingText = { if (error != null) Text(error) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Phone,
