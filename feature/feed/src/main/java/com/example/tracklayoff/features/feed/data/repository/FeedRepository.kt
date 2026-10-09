@@ -33,6 +33,7 @@ class FeedRepository @Inject constructor(
 
             NetworkResult.Success(Unit)
         } catch (ex: Exception) {
+            if (ex is kotlinx.coroutines.CancellationException) throw ex
             NetworkResult.Error(
                 exception = ex,
                 message = ex.message
