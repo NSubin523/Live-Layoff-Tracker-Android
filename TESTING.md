@@ -25,6 +25,8 @@ ANDROID_SERIAL=emulator-5554 ./gradlew :app:connectedDebugAndroidTest \
 
 Phone verification uses Firebase's `onCodeSent` verification ID plus the entered code, or signs in directly with the credential from `onVerificationCompleted`. No phone number, OTP, fabricated credential, or app-verification bypass is hardcoded into production code. Google sign-in retains its existing implementation. See [Firebase's Android phone-authentication contract](https://firebase.google.com/docs/auth/android/phone-auth).
 
+A fictional number still needs a valid country/area code. `+15555550100` is invalid and has no recognized region. A suitable US fixture is `+16505550100`, with its code configured in Firebase. The app validates with Google’s libphonenumber metadata before requesting a code.
+
 ## Firebase configuration prerequisite
 
 If Firebase returns `SMS unable to be sent until this region enabled by the app developer`, confirm Phone sign-in is enabled, the fictional number/code is saved there, and Authentication → Settings → SMS region policy allows the number’s country. The app cannot override that server-side policy. See [SMS region settings](https://docs.cloud.google.com/identity-platform/docs/admin/sms-regions).

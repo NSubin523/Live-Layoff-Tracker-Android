@@ -11,7 +11,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import com.example.tracklayoff.features.auth.domain.PhoneInput
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,9 +37,8 @@ fun PhoneNumberInputDialog(
     isSending: Boolean = false
 ) {
     var phoneNumber by remember { mutableStateOf("") }
-    val isValidPhoneNumber by remember(isSending) {
-        derivedStateOf { PhoneInput.normalize(phoneNumber) != null && !isSending }
-    }
+    var hasValidNumber by remember { mutableStateOf(false) }
+    val isValidPhoneNumber = hasValidNumber && !isSending
 
     val currentPhoneNumber by rememberUpdatedState(phoneNumber)
     val onConfirm = remember(onSubmitPhoneNumber) {
@@ -68,6 +66,8 @@ fun PhoneNumberInputDialog(
                 value = phoneNumber,
                 onValueChange = { input ->
                     if (input.all { it in "0123456789+ -()." }) {
+                        // Validate on the input event, before the next composition.
+                        hasValidNumber = PhoneInput.normalize(input) != null
                         phoneNumber = input
                     }
                 },

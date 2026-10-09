@@ -26,6 +26,7 @@ googleid = "1.2.0"
 kotlinxCollectionsImmutable = "0.3.8"
 
 [libraries]
+libphonenumber = { group = "com.googlecode.libphonenumber", name = "libphonenumber", version = "9.0.41" }
 androidx-test-rules = { group = "androidx.test", name = "rules", version = "1.5.0" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version = "5.14.2" }
 okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttp" }

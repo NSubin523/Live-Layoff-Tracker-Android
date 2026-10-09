@@ -23,13 +23,13 @@ class PhoneSignInUiTest {
         var number: String? = null
         compose.setContent { MaterialTheme { PhoneNumberInputDialog(onDismissRequest = {}, onSubmitPhoneNumber = { number = it }) } }
         compose.onNodeWithText("Send Code").assertIsNotEnabled()
-        compose.onNode(hasSetTextAction()).performTextInput("555-555-0100")
+        compose.onNode(hasSetTextAction()).performTextInput("650-555-0100")
         compose.onNodeWithText("Send Code").assertIsEnabled().performClick()
-        assertEquals("555-555-0100", number)
+        assertEquals("650-555-0100", number)
     }
     @Test fun OTPRequiresExactlySixDigitsAndSubmitsEnteredCode() {
         var code: String? = null
-        compose.setContent { MaterialTheme { OtpVerificationInputDialog(phoneNumber = "+15555550100", onDismissRequest = {}, onSubmitOtp = { code = it }) } }
+        compose.setContent { MaterialTheme { OtpVerificationInputDialog(phoneNumber = "+16505550100", onDismissRequest = {}, onSubmitOtp = { code = it }) } }
         compose.onNodeWithText("Verify").assertIsNotEnabled()
         compose.onNode(hasSetTextAction()).performTextInput("12345")
         compose.onNodeWithText("Verify").assertIsNotEnabled()
@@ -38,10 +38,10 @@ class PhoneSignInUiTest {
         assertEquals("123456", code)
     }
     @Test fun failureIsVisibleAndVerificationDisablesRepeatedSubmit() {
-        val state = androidx.compose.runtime.mutableStateOf<PhoneAuthState>(PhoneAuthState.CodeEntry("+15555550100", "session", "Wrong code"))
+        val state = androidx.compose.runtime.mutableStateOf<PhoneAuthState>(PhoneAuthState.CodeEntry("+16505550100", "session", "Wrong code"))
         compose.setContent { MaterialTheme { PhoneSignInContent(state.value, {}, {}, {}) } }
         compose.onNodeWithText("Wrong code").assertIsDisplayed()
-        compose.runOnIdle { state.value = PhoneAuthState.Verifying(PhoneAuthState.CodeEntry("+15555550100", "session")) }
+        compose.runOnIdle { state.value = PhoneAuthState.Verifying(PhoneAuthState.CodeEntry("+16505550100", "session")) }
         compose.onNodeWithText("Verify").assertIsNotEnabled()
     }
 }
