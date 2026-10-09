@@ -18,13 +18,14 @@ import com.example.tracklayoff.designsystems.AppTopBarText
 @Composable
 fun CustomTopAppBar(
     authenticationState: AuthenticationState,
-    onProfileClick: () -> Unit
+    onProfileClick: () -> Unit,
+    title: String = AppTopBarText
 ){
     Column {
         TopAppBar(
             title = {
                 Text(
-                    text = AppTopBarText,
+                    text = title,
                     fontWeight = FontWeight.Bold,
                     color = AppColors.PrimaryTextColor
                 )

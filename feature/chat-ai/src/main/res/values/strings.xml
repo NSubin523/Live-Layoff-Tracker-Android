@@ -1,0 +1,24 @@
+<resources>
+    <string name="chat_title">Chat AI</string>
+    <string name="chat_user_label">You</string>
+    <string name="chat_guest_title">Sign in to ask about layoffs</string>
+    <string name="chat_guest_subtitle">Explore company layoffs and market trends.</string>
+    <string name="chat_empty_title">Ask me about layoff trends</string>
+    <string name="chat_empty_subtitle">Explore layoffs by company, industry, or recent market trends.</string>
+    <string name="chat_history_loading">Loading your conversation…</string>
+    <string name="chat_history_failed">Couldn’t load your conversation</string>
+    <string name="chat_retry">Try again</string>
+    <string name="chat_prompt_placeholder">Ask about layoffs…</string>
+    <string name="chat_send_description">Send message</string>
+    <string name="chat_prompt_too_long">Use up to %2$d characters (%1$d/%2$d).</string>
+    <string name="chat_thinking">Thinking…</string>
+    <string name="chat_retry_older">Retry older messages</string>
+    <string name="chat_load_older">Load older messages</string>
+    <string name="chat_latest_messages">Latest messages ↓</string>
+    <string name="chat_error_authentication">Please sign in again to continue.</string>
+    <string name="chat_error_network">Couldn’t connect. Check your internet connection.</string>
+    <string name="chat_error_service">Couldn’t finish this reply. Please try a new message.</string>
+    <string name="chat_error_protocol">We couldn’t read the server response.</string>
+    <string name="chat_error_interrupted">The connection ended before this reply finished.</string>
+    <string name="chat_error_invalid_prompt">Enter a nonblank message within the character limit.</string>
+</resources>

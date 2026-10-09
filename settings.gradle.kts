@@ -33,3 +33,5 @@ include(":feature:auth")
 include(":feature:tracker")
 include(":feature:reporting")
 include(":feature:notifications")
+
+include(":feature:chat-ai")

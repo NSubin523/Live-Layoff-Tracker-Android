@@ -60,4 +60,30 @@ object AppDimens {
 
     //Phone Input Dialog
     val PhoneInputDialogHeight = 16.dp
+
+    // Chat layout tokens
+    val ChatHorizontalPadding = 16.dp
+    val ChatVerticalPadding = SpacingXxl
+    val ChatComposerSpacing = SpacingXl
+    val ChatComposerCornerRadius = 24.dp
+    val ChatSendButtonSize = 48.dp
+    val ChatInputMaxLines = 5
+    val ChatValidationPaddingStart = SpacingXxl
+    val ChatValidationPaddingTop = SpacingMedium
+    val ChatEmptyContentPadding = 32.dp
+    val ChatErrorContentPadding = 24.dp
+    val ChatHistoryIndicatorSize = 28.dp
+    val ChatPaginationIndicatorSize = 22.dp
+    val ChatMessageVerticalPadding = SpacingMedium
+    val ChatMessageLabelHorizontalPadding = SpacingXxl
+    val ChatMessageLabelVerticalPadding = SpacingStandard
+    val ChatMessageCornerRadius = 18.dp
+    val ChatMessageMaxWidth = 560.dp
+    val ChatMessageContentPadding = 14.dp
+    val ChatReplyIndicatorSize = 16.dp
+    val ChatReplyIndicatorStrokeWidth = 2.dp
+    val ChatStreamingIndicatorWidth = 32.dp
+    val ChatScrollBottomThreshold = 48.dp
+    val ChatOlderPagePrefetchItemCount = 3
+
 }

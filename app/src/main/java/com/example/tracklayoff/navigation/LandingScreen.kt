@@ -2,6 +2,7 @@ package com.example.tracklayoff.navigation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,6 +43,9 @@ import com.example.tracklayoff.features.feed.ui.composables.FeedScreen
 import com.example.tracklayoff.features.notifications.ui.NotificationPermissionDialog
 import com.example.tracklayoff.features.reporting.domain.CentralTelemetryInterface
 import com.example.tracklayoff.features.tracker.ui.composable.TrackerScreen
+import com.example.tracklayoff.features.chat.ui.composables.ChatRoute
+import com.example.tracklayoff.features.chat.ui.composables.ChatGuestContent
+import com.example.tracklayoff.designsystems.AppTopBarText
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,6 +67,7 @@ fun LandingScreen(
     val selectedTab = remember(selectedTabRoute) {
         when(selectedTabRoute) {
             BottomNavItem.Tracker.route -> BottomNavItem.Tracker
+            BottomNavItem.ChatAi.route -> BottomNavItem.ChatAi
             else -> BottomNavItem.Feed
         }
     }
@@ -148,6 +153,7 @@ fun LandingScreen(
             ){
                 CustomTopAppBar(
                     authenticationState = authenticationState,
+                    title = if (selectedTab == BottomNavItem.ChatAi) "Chat AI" else AppTopBarText,
                     onProfileClick = {
                         when(authUiState) {
                             is AuthUiState.Authenticated -> showDropdownMenu = true
@@ -192,8 +198,19 @@ fun LandingScreen(
             )
         }
     ) { innerPadding ->
-        Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+        Box(modifier = Modifier.fillMaxSize().padding(innerPadding).consumeWindowInsets(innerPadding)) {
             when (selectedTab) {
+                BottomNavItem.ChatAi -> {
+                    // Request the activity-owned VM only on an authenticated visit.
+                    if (authUiState is AuthUiState.Authenticated) {
+                        ChatRoute(
+                            userId = (authUiState as AuthUiState.Authenticated).appUser.firebaseId,
+                            onSignInClick = { showSignInSheet = true }
+                        )
+                    } else {
+                        ChatGuestContent(onSignInClick = { showSignInSheet = true })
+                    }
+                }
                 BottomNavItem.Feed -> {
                     FeedScreen(snackBarHostState = snackBarHostState,)
                 }
