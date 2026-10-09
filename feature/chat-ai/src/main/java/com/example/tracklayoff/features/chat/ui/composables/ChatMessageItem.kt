@@ -10,48 +10,48 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
-import com.example.tracklayoff.features.chat.domain.model.ChatRole
-import com.example.tracklayoff.features.chat.ui.mapper.toDisplayMessage
+import androidx.compose.ui.res.stringResource
+import com.example.tracklayoff.designsystems.AppDimens
+import com.example.tracklayoff.feature.chat.ai.R
 import com.example.tracklayoff.features.chat.ui.state.ChatMessageStatus
 import com.example.tracklayoff.features.chat.ui.state.ChatMessageUiModel
 
 @Composable
 internal fun ChatMessageItem(message: ChatMessageUiModel) {
-    val user = message.role == ChatRole.USER
+    val user = message.isUser
     Column(
-        Modifier.fillMaxWidth().padding(vertical = 6.dp),
+        Modifier.fillMaxWidth().padding(vertical = AppDimens.ChatMessageVerticalPadding),
         horizontalAlignment = if (user) Alignment.End else Alignment.Start
     ) {
         Text(
-            if (user) "You" else "Chat AI",
+            stringResource(if (user) R.string.chat_user_label else R.string.chat_title),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+            modifier = Modifier.padding(horizontal = AppDimens.ChatMessageLabelHorizontalPadding, vertical = AppDimens.ChatMessageLabelVerticalPadding)
         )
         Surface(
-            shape = RoundedCornerShape(18.dp),
+            shape = RoundedCornerShape(AppDimens.ChatMessageCornerRadius),
             color = if (user) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
-            modifier = Modifier.widthIn(max = 560.dp)
+            modifier = Modifier.widthIn(max = AppDimens.ChatMessageMaxWidth)
         ) {
-            Column(Modifier.padding(14.dp)) {
-                if (message.text.isNotEmpty()) {
+            Column(Modifier.padding(AppDimens.ChatMessageContentPadding)) {
+                if (message.hasText) {
                     SelectionContainer {
                         Text(message.text, style = MaterialTheme.typography.bodyLarge)
                     }
                 }
                 if (message.status == ChatMessageStatus.Waiting) {
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
-                        Text("Thinking…", style = MaterialTheme.typography.bodyMedium)
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(AppDimens.SpacingXl)) {
+                        CircularProgressIndicator(Modifier.size(AppDimens.ChatReplyIndicatorSize), strokeWidth = AppDimens.ChatReplyIndicatorStrokeWidth)
+                        Text(stringResource(R.string.chat_thinking), style = MaterialTheme.typography.bodyMedium)
                     }
                 } else if (message.status == ChatMessageStatus.Streaming) {
-                    LinearProgressIndicator(Modifier.padding(top = 10.dp).width(32.dp))
+                    LinearProgressIndicator(Modifier.padding(top = AppDimens.SpacingXl).width(AppDimens.ChatStreamingIndicatorWidth))
                 }
-                message.failure?.let { failure ->
-                    if (message.text.isNotEmpty()) Spacer(Modifier.height(10.dp))
+                message.failureMessage?.let { failure ->
+                    if (message.hasText) Spacer(Modifier.height(AppDimens.SpacingXl))
                     Text(
-                        failure.toDisplayMessage(),
+                        stringResource(failure.resourceId),
                         color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }

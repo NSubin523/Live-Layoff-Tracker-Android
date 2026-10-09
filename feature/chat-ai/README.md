@@ -12,6 +12,14 @@ Text-only chat backed by the shared Python API base URL. The app shell adds a th
 - `data`: DTOs, transport, parsing, mapping, and repository implementation.
 - `di`: binds implementations and configures a streaming client derived from the shared network client.
 
+## Presentation state
+
+`ChatUiState` builds immutable composer and message-list projections when state is created or copied. Prompt normalization, Unicode length validation, send eligibility, message ordering, and failure mapping happen before composition. Composables receive focused state and emit callbacks; they do not calculate domain policy.
+
+Chat sizes and spacing use the shared `AppDimens` design-system tokens. Domain failures map exhaustively to `ChatFailureMessage` enum keys backed by Android string resources, resolved only by the UI.
+
+Scroll position and field coordinates remain local layout concerns. Scroll visibility is read in the latest-message button, pagination reads occur in `snapshotFlow`, and field coordinates are read only by pointer handlers.
+
 ## Session and caching
 
 Guests do not request the ChatViewModel. The authenticated route requests an activity-owned Hilt ViewModel on its first visit. Messages and pagination are held in memory across tab changes and rotation; no chat content is written to Room or saved instance state.

@@ -13,50 +13,45 @@ import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.example.tracklayoff.designsystems.AppDimens
 import com.example.tracklayoff.feature.chat.ai.R
-import com.example.tracklayoff.features.chat.domain.model.ChatFailure
-import com.example.tracklayoff.features.chat.domain.usecase.SendChatMessageUseCase
-import com.example.tracklayoff.features.chat.ui.mapper.toDisplayMessage
+import com.example.tracklayoff.features.chat.ui.state.ChatComposerUiState
 
 @Composable
 internal fun ChatComposer(
-    draft: String,
-    enabled: Boolean,
-    canSend: Boolean,
-    validationError: ChatFailure?,
+    state: ChatComposerUiState,
     onTextFieldBoundsChanged: (Rect) -> Unit,
     onDraftChanged: (String) -> Unit,
     onSend: () -> Unit
 ) {
-    val length = draft.trim().codePointCount(0, draft.trim().length)
-    val tooLong = length > SendChatMessageUseCase.MAX_PROMPT_LENGTH
-    Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
-        Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+    Column(Modifier.fillMaxWidth().padding(horizontal = AppDimens.ChatHorizontalPadding, vertical = AppDimens.ChatVerticalPadding)) {
+        Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(AppDimens.ChatComposerSpacing)) {
             OutlinedTextField(
-                value = draft,
+                value = state.draft,
                 onValueChange = onDraftChanged,
                 modifier = Modifier.weight(1f).onGloballyPositioned {
                     onTextFieldBoundsChanged(it.boundsInRoot())
                 },
-                enabled = enabled,
-                placeholder = { Text("Ask about layoffs…") },
-                shape = RoundedCornerShape(24.dp),
-                maxLines = 5,
-                isError = tooLong || validationError != null,
+                enabled = state.enabled,
+                placeholder = { Text(stringResource(R.string.chat_prompt_placeholder)) },
+                shape = RoundedCornerShape(AppDimens.ChatComposerCornerRadius),
+                maxLines = AppDimens.ChatInputMaxLines,
+                isError = state.isError,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
-                keyboardActions = KeyboardActions(onSend = { if (canSend) onSend() })
+                keyboardActions = KeyboardActions(onSend = { if (state.canSend) onSend() })
             )
-            FilledIconButton(onClick = onSend, enabled = canSend, modifier = Modifier.size(48.dp)) {
-                Icon(painterResource(R.drawable.ic_send), contentDescription = "Send message")
+            FilledIconButton(onClick = onSend, enabled = state.canSend, modifier = Modifier.size(AppDimens.ChatSendButtonSize)) {
+                Icon(painterResource(R.drawable.ic_send), contentDescription = stringResource(R.string.chat_send_description))
             }
         }
-        if (tooLong || validationError != null) {
+        if (state.isError) {
             Text(
-                validationError?.toDisplayMessage() ?: "Use up to 500 characters ($length/500).",
+                state.validationMessage?.let { stringResource(it.resourceId) }
+                    ?: stringResource(R.string.chat_prompt_too_long, state.characterCount, state.maxPromptLength),
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(start = 12.dp, top = 6.dp)
+                modifier = Modifier.padding(start = AppDimens.ChatValidationPaddingStart, top = AppDimens.ChatValidationPaddingTop)
             )
         }
     }

@@ -1,5 +1,7 @@
 package com.example.tracklayoff.features.chat.ui.composables
 
+import androidx.compose.ui.res.stringResource
+import com.example.tracklayoff.feature.chat.ai.R
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,8 +31,8 @@ fun ChatRoute(userId: String, onSignInClick: () -> Unit, viewModel: ChatViewMode
 @Composable
 fun ChatGuestContent(onSignInClick: () -> Unit) {
     EmptyScreen(
-        title = "Sign in to ask about layoffs",
-        subtitle = "Explore company layoffs and market trends.",
+        title = stringResource(R.string.chat_guest_title),
+        subtitle = stringResource(R.string.chat_guest_subtitle),
         hasButton = true,
         onClickAction = onSignInClick
     )
