@@ -40,17 +40,17 @@ class PhoneAuthTest {
         try { block(vm, gateway, telemetry) } finally { vm.dismiss(); runCurrent(); Dispatchers.resetMain() }
     }
     @Test fun `normalizes formatted test number and international numbers`() {
-        assertEquals("+15555550100", PhoneInput.normalize("555-555-0100"))
-        assertEquals("+15555550100", PhoneInput.normalize("+1 (555) 555-0100"))
+        assertEquals("+16505550100", PhoneInput.normalize("650-555-0100"))
+        assertEquals("+16505550100", PhoneInput.normalize("+1 (650) 555-0100"))
         assertEquals("+447911123456", PhoneInput.normalize("+44 7911 123456"))
-        listOf("", "123", "5555550100+", "++15555550100", "+012345678", "abc5555550100").forEach { assertNull(PhoneInput.normalize(it)) }
+        listOf("", "123", "+15555550100", "5555550100", "6505550100+", "++16505550100", "+012345678", "abc6505550100").forEach { assertNull(PhoneInput.normalize(it)) }
         assertTrue(PhoneInput.isValidCode("123456"))
         listOf("12345", "1234567", "abcdef", "１２３４５６").forEach { assertFalse(PhoneInput.isValidCode(it)) }
     }
     @Test fun `code is requested before OTP and entered OTP uses actual verification id`() = withVm { vm, gateway, telemetry ->
-        vm.open(); vm.sendCode(mock(Context::class.java), "555-555-0100"); runCurrent()
+        vm.open(); vm.sendCode(mock(Context::class.java), "650-555-0100"); runCurrent()
         assertTrue(vm.state.value is PhoneAuthState.SendingCode)
-        assertEquals(listOf("+15555550100"), gateway.numbers)
+        assertEquals(listOf("+16505550100"), gateway.numbers)
         gateway.events.emit(PhoneVerificationEvent.CodeSent("firebase-session")); runCurrent()
         assertTrue(vm.state.value is PhoneAuthState.CodeEntry)
         vm.verify("123456"); runCurrent()
@@ -59,7 +59,7 @@ class PhoneAuthTest {
         verify(telemetry).trackUserLogin()
     }
     @Test fun `wrong OTP keeps session available for retry and does not report login`() = withVm { vm, gateway, telemetry ->
-        vm.open(); vm.sendCode(mock(Context::class.java), "5555550100"); runCurrent()
+        vm.open(); vm.sendCode(mock(Context::class.java), "6505550100"); runCurrent()
         gateway.events.emit(PhoneVerificationEvent.CodeSent("session")); runCurrent()
         gateway.result = NetworkResult.Error(IllegalArgumentException(), "Wrong code")
         vm.verify("000000"); runCurrent()
@@ -70,18 +70,18 @@ class PhoneAuthTest {
         assertEquals(PhoneAuthState.Closed, vm.state.value)
     }
     @Test fun `automatic verification uses authenticated event without asking for OTP`() = withVm { vm, gateway, telemetry ->
-        vm.open(); vm.sendCode(mock(Context::class.java), "5555550100"); runCurrent()
+        vm.open(); vm.sendCode(mock(Context::class.java), "6505550100"); runCurrent()
         gateway.events.emit(PhoneVerificationEvent.Authenticated(user)); runCurrent()
         assertEquals(PhoneAuthState.Closed, vm.state.value); verify(telemetry).trackUserLogin()
     }
     @Test fun `send failures return to number entry and duplicate sends are ignored`() = withVm { vm, gateway, telemetry ->
-        vm.open(); vm.sendCode(mock(Context::class.java), "5555550100"); vm.sendCode(mock(Context::class.java), "5555550100"); runCurrent()
+        vm.open(); vm.sendCode(mock(Context::class.java), "6505550100"); vm.sendCode(mock(Context::class.java), "6505550100"); runCurrent()
         assertEquals(1, gateway.numbers.size)
         gateway.events.emit(PhoneVerificationEvent.Failed("Quota error")); runCurrent()
         assertEquals(PhoneAuthState.NumberEntry("Quota error"), vm.state.value); verifyNoInteractions(telemetry)
     }
     @Test fun `dismiss ignores late callbacks and duplicate verify requests`() = withVm { vm, gateway, telemetry ->
-        vm.open(); vm.sendCode(mock(Context::class.java), "5555550100"); runCurrent()
+        vm.open(); vm.sendCode(mock(Context::class.java), "6505550100"); runCurrent()
         gateway.events.emit(PhoneVerificationEvent.CodeSent("session")); runCurrent()
         gateway.gate = CompletableDeferred()
         vm.verify("123456"); vm.verify("123456"); runCurrent(); assertEquals(1, gateway.submissions.size)

@@ -31,6 +31,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.libphonenumber)
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)
     testImplementation(libs.kotlinx.coroutines.test)

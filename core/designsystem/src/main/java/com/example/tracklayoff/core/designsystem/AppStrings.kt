@@ -7,7 +7,7 @@ const val PhoneDialogHeader = "Enter phone number"
 const val PhoneDialogSendCode = "Send Code"
 const val AppAlertDialogCancelText = "Cancel"
 const val PhoneDialogContentTitle = "Enter your phone number with country code to receive a verification code."
-const val PhoneDialogContentPlaceholder = "+1 555 555 0100"
+const val PhoneDialogContentPlaceholder = "+1 650 555 0100"
 
 // Dialog Alert OTP verification
 const val OtpVerificationHeader = "Enter verification code"
