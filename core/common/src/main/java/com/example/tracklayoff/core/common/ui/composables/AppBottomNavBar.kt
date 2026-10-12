@@ -1,13 +1,16 @@
 package com.example.tracklayoff.core.common.ui.composables
 
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import com.example.tracklayoff.designsystems.AppDimens
+import com.example.tracklayoff.core.designsystem.AppDimens
 import com.example.tracklayoff.navigation.BottomNavIconType
 import com.example.tracklayoff.navigation.BottomNavItem
 
@@ -19,26 +22,36 @@ fun AppBottomNavBar(
     items: List<BottomNavItem> = listOf(BottomNavItem.Feed, BottomNavItem.Tracker, BottomNavItem.ChatAi),
 ) {
     NavigationBar(
-        modifier = modifier.height(AppDimens.AppNavbarHeight)
+        modifier = modifier.height(AppDimens.AppNavbarHeight),
+        containerColor = MaterialTheme.colorScheme.surface
     ) {
         items.forEach { item ->
             val isSelected = selectedTab == item
             val iconType = if (isSelected) item.selectedIcon else item.unselectedIcon
             NavigationBarItem(
                 selected = isSelected,
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                    indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                ),
                 onClick = { onTabSelected(item) },
                 icon = {
                     when(iconType) {
                         is BottomNavIconType.ImageType -> {
                             Icon(
                                 painter = painterResource(iconType.id),
-                                contentDescription = item.title
+                                contentDescription = item.title,
+                                modifier = Modifier.size(AppDimens.BottomNavIconSize)
                             )
                         }
                         is BottomNavIconType.VectorType -> {
                             Icon(
                                 imageVector = iconType.imageVector,
-                                contentDescription = item.title
+                                contentDescription = item.title,
+                                modifier = Modifier.size(AppDimens.BottomNavIconSize)
                             )
                         }
                     }

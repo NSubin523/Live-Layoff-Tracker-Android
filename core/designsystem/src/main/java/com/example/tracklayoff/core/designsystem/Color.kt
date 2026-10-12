@@ -1,26 +1,20 @@
-package com.example.tracklayoff.designsystems
+package com.example.tracklayoff.core.designsystem
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
-
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
-val White = Color(0xFFFFFFFF)
-
+/** Semantic accents for feed data, separate from navigation and interactive colors. */
 object AppColors {
-    val PrimaryCountTextColor = Color(0xFFD32F2F)
-    val PrimaryTextColor = Color(0xFF1A237E)
-    val PrimaryCategoryBgColor = Color(0xFF909193)
-    val PrimaryAppTopBarBgColor = Color(0xFFF5F5F5)
-    val StatusPillConfirmedColor = Color(0xFFB6171E)
-    val StatusPillRumoredColor = Color(0xFFC09204)
-    val CompanyNameTextColor = Color(0xFF1A1C1D)
-    val CompanyLocationTextColor = Color(0xFF454652)
-
-    val PrimarySnackBarColor = Color(0xFF2D2F31)
-    val PrimaryContainerColorDropdown = Color(0xFFF5F5F7)
+    val Impact: Color
+        @Composable get() = if (MaterialTheme.colorScheme.surface.luminance() < 0.5f) Color(0xFFFFB4AB) else Color(0xFFB3261E)
+    val Confirmed: Color
+        @Composable get() = if (MaterialTheme.colorScheme.surface.luminance() < 0.5f) Color(0xFF9ED8B1) else Color(0xFF23643D)
+    val ConfirmedContainer: Color
+        @Composable get() = if (MaterialTheme.colorScheme.surface.luminance() < 0.5f) Color(0xFF203D2B) else Color(0xFFE8F4EB)
+    val Rumored: Color
+        @Composable get() = if (MaterialTheme.colorScheme.surface.luminance() < 0.5f) Color(0xFFF3CD83) else Color(0xFF74520D)
+    val RumoredContainer: Color
+        @Composable get() = if (MaterialTheme.colorScheme.surface.luminance() < 0.5f) Color(0xFF43351D) else Color(0xFFFFF3DA)
 }

@@ -20,11 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.example.tracklayoff.core.common.ui.composables.AppAlertDialog
-import com.example.tracklayoff.designsystems.AppDimens
-import com.example.tracklayoff.designsystems.PhoneDialogContentPlaceholder
-import com.example.tracklayoff.designsystems.PhoneDialogContentTitle
-import com.example.tracklayoff.designsystems.PhoneDialogHeader
-import com.example.tracklayoff.designsystems.PhoneDialogSendCode
+import com.example.tracklayoff.core.designsystem.AppDimens
+import com.example.tracklayoff.core.designsystem.PhoneDialogContentPlaceholder
+import com.example.tracklayoff.core.designsystem.PhoneDialogContentTitle
+import com.example.tracklayoff.core.designsystem.PhoneDialogHeader
+import com.example.tracklayoff.core.designsystem.PhoneDialogSendCode
 
 const val MAX_PH_LEN = 10
 

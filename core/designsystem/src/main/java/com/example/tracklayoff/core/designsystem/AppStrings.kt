@@ -1,4 +1,4 @@
-package com.example.tracklayoff.designsystems
+package com.example.tracklayoff.core.designsystem
 
 const val AppTopBarText = "Layoff Tracker"
 

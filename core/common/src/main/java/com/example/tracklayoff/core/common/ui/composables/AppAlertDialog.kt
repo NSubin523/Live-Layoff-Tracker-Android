@@ -6,7 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.tracklayoff.designsystems.AppAlertDialogCancelText
+import com.example.tracklayoff.core.designsystem.AppAlertDialogCancelText
 
 @Composable
 fun AppAlertDialog(

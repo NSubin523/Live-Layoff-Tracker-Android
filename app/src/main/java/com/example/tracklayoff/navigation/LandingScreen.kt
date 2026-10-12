@@ -32,7 +32,7 @@ import com.example.tracklayoff.core.common.ui.composables.CustomTopAppBar
 import com.example.tracklayoff.core.common.ui.composables.ObserveAppEvent
 import com.example.tracklayoff.core.common.ui.extension.showAppCustomSnackBar
 import com.example.tracklayoff.core.common.ui.state.AuthenticationState
-import com.example.tracklayoff.designsystems.AppDimens
+import com.example.tracklayoff.core.designsystem.AppDimens
 import com.example.tracklayoff.features.auth.ui.PhoneAuthViewModel
 import com.example.tracklayoff.features.auth.ui.composable.PhoneSignInContent
 import com.example.tracklayoff.features.auth.ui.AuthViewmodel
@@ -45,7 +45,7 @@ import com.example.tracklayoff.features.reporting.domain.CentralTelemetryInterfa
 import com.example.tracklayoff.features.tracker.ui.composable.TrackerScreen
 import com.example.tracklayoff.features.chat.ui.composables.ChatRoute
 import com.example.tracklayoff.features.chat.ui.composables.ChatGuestContent
-import com.example.tracklayoff.designsystems.AppTopBarText
+import com.example.tracklayoff.core.designsystem.AppTopBarText
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -133,7 +133,7 @@ fun LandingScreen(
             ){
                 CustomTopAppBar(
                     authenticationState = authenticationState,
-                    title = if (selectedTab == BottomNavItem.ChatAi) "Chat AI" else AppTopBarText,
+                    title = if (selectedTab == BottomNavItem.ChatAi) selectedTab.title else AppTopBarText,
                     onProfileClick = {
                         when(authUiState) {
                             is AuthUiState.Authenticated -> showDropdownMenu = true

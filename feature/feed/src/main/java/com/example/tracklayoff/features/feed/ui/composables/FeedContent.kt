@@ -2,15 +2,14 @@ package com.example.tracklayoff.features.feed.ui.composables
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.painterResource
+import com.example.tracklayoff.feature.feed.R
 import com.example.tracklayoff.core.common.ui.composables.AppLazyColumn
 import com.example.tracklayoff.core.common.ui.composables.AppLoadingOverlay
 import com.example.tracklayoff.core.common.ui.composables.EmptyScreen
@@ -48,9 +47,9 @@ fun FeedContent(
                 }
 
                 is FeedUiState.Success -> {
-                    val placeholderIcon = rememberVectorPainter(Icons.Outlined.AccountBox)
+                    val placeholderIcon = painterResource(R.drawable.ic_company)
                     AppLazyColumn(
-                        items = state.companies,
+                        items = state.cards,
                         key = { company -> company.id },
                         emptyScreen = {
                             EmptyScreen(
@@ -59,7 +58,7 @@ fun FeedContent(
                             )
                         }
                     ) { company ->
-                        LayoffCardItem(company = company, placeholderIcon = placeholderIcon)
+                        LayoffCardItem(card = company, placeholderIcon = placeholderIcon)
                     }
                 }
             }

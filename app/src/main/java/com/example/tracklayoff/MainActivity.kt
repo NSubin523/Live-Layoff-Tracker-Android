@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.tracklayoff.designsystems.TrackLayoffTheme
+import com.example.tracklayoff.core.designsystem.TrackLayoffTheme
 import com.example.tracklayoff.features.reporting.domain.CentralTelemetryInterface
 import com.example.tracklayoff.navigation.LandingScreen
 import dagger.hilt.android.AndroidEntryPoint

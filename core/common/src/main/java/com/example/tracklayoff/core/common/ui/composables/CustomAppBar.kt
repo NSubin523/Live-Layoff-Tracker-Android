@@ -10,9 +10,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontWeight
 import com.example.tracklayoff.core.common.ui.state.AuthenticationState
-import com.example.tracklayoff.designsystems.AppColors
-import com.example.tracklayoff.designsystems.AppDimens
-import com.example.tracklayoff.designsystems.AppTopBarText
+import com.example.tracklayoff.core.designsystem.AppDimens
+import com.example.tracklayoff.core.designsystem.AppTopBarText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,11 +26,11 @@ fun CustomTopAppBar(
                 Text(
                     text = title,
                     fontWeight = FontWeight.Bold,
-                    color = AppColors.PrimaryTextColor
+                    color = MaterialTheme.colorScheme.primary
                 )
             },
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = AppColors.PrimaryAppTopBarBgColor,
+                containerColor = MaterialTheme.colorScheme.surface,
                 titleContentColor = MaterialTheme.colorScheme.onSurface,
                 actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant
             ),

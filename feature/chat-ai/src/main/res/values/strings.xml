@@ -1,14 +1,14 @@
 <resources>
-    <string name="chat_title">Chat AI</string>
+    <string name="chat_title">Woody</string>
     <string name="chat_user_label">You</string>
-    <string name="chat_guest_title">Sign in to ask about layoffs</string>
+    <string name="chat_guest_title">Sign in to chat with Woody</string>
     <string name="chat_guest_subtitle">Explore company layoffs and market trends.</string>
-    <string name="chat_empty_title">Ask me about layoff trends</string>
+    <string name="chat_empty_title">Ask Woody about layoff trends</string>
     <string name="chat_empty_subtitle">Explore layoffs by company, industry, or recent market trends.</string>
     <string name="chat_history_loading">Loading your conversation…</string>
     <string name="chat_history_failed">Couldn’t load your conversation</string>
     <string name="chat_retry">Try again</string>
-    <string name="chat_prompt_placeholder">Ask about layoffs…</string>
+    <string name="chat_prompt_placeholder">Ask Woody…</string>
     <string name="chat_send_description">Send message</string>
     <string name="chat_prompt_too_long">Use up to %2$d characters (%1$d/%2$d).</string>
     <string name="chat_thinking">Thinking…</string>

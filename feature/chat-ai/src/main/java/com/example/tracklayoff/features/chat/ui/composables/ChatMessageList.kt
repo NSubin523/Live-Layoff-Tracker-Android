@@ -9,7 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.example.tracklayoff.designsystems.AppDimens
+import com.example.tracklayoff.core.designsystem.AppDimens
 import androidx.compose.ui.platform.LocalDensity
 import com.example.tracklayoff.feature.chat.ai.R
 import com.example.tracklayoff.features.chat.ui.state.*

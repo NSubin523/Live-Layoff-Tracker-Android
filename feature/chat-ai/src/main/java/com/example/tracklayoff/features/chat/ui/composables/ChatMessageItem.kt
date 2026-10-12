@@ -11,7 +11,7 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.stringResource
-import com.example.tracklayoff.designsystems.AppDimens
+import com.example.tracklayoff.core.designsystem.AppDimens
 import com.example.tracklayoff.feature.chat.ai.R
 import com.example.tracklayoff.features.chat.ui.state.ChatMessageStatus
 import com.example.tracklayoff.features.chat.ui.state.ChatMessageUiModel

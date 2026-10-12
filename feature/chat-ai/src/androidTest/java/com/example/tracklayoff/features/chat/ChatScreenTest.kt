@@ -25,7 +25,7 @@ class ChatScreenTest {
     @Test fun guestSignInUsesCallback() {
         var clicked = false
         compose.setContent { MaterialTheme { ChatGuestContent { clicked = true } } }
-        compose.onNodeWithText("Sign in to ask about layoffs").assertIsDisplayed()
+        compose.onNodeWithText("Sign in to chat with Woody").assertIsDisplayed()
         compose.onNodeWithText("Sign in").performClick()
         assertTrue(clicked)
     }
@@ -42,7 +42,7 @@ class ChatScreenTest {
                 }
             }
         } }
-        compose.onNodeWithText("Ask me about layoff trends").assertIsDisplayed()
+        compose.onNodeWithText("Ask Woody about layoff trends").assertIsDisplayed()
         compose.onNodeWithContentDescription("Send message").assertIsNotEnabled()
         compose.onNode(hasSetTextAction()).performTextInput("Is Meta laying off?")
         compose.onNodeWithContentDescription("Send message").assertIsEnabled().performClick()
@@ -54,7 +54,7 @@ class ChatScreenTest {
         val state = mutableStateOf(ChatUiState(history = ChatLoadState.Loading))
         compose.setContent { MaterialTheme { ChatScreen(state.value) {} } }
         compose.onNodeWithText("Loading your conversation…").assertIsDisplayed()
-        compose.onNodeWithText("Ask me about layoff trends").assertDoesNotExist()
+        compose.onNodeWithText("Ask Woody about layoff trends").assertDoesNotExist()
         compose.onNodeWithContentDescription("Send message").assertIsNotEnabled()
         compose.runOnIdle { state.value = state.value.copy(history = ChatLoadState.Failed(ChatFailure.Network)) }
         compose.onNodeWithText("Couldn’t load your conversation").assertIsDisplayed()
