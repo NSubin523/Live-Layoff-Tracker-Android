@@ -1,4 +1,4 @@
-package com.example.tracklayoff.designsystems
+package com.example.tracklayoff.core.designsystem
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -18,11 +18,19 @@ object AppDimens {
     val StandardFontSize = 10.sp
 
     //Layoff Card Dimens
-    val RoundedCornerShapeLayoffCard = 4.dp
+    val RoundedCornerShapeLayoffCard = 12.dp
     val HorizontalPaddingLayoffCard = 16.dp
     val VerticalPaddingLayoffCard = 6.dp
     val BorderStrokeLayoffCard = 1.dp
     val CardSpacing = 12.dp
+    val LayoffCardContentPadding = 16.dp
+    val FeedMetadataSpacing = 8.dp
+    val FeedSectionSpacing = 12.dp
+    val FeedStatusIconSize = 12.dp
+    val FeedMetadataIconSize = 14.dp
+    val FeedLogoCornerRadius = 8.dp
+    val FeedCardElevation = 0.dp
+    val BottomNavIconSize = 24.dp
     val StatusPillRenderHeight = 8.dp
     val LayoffCardImageSize = 40.dp
 

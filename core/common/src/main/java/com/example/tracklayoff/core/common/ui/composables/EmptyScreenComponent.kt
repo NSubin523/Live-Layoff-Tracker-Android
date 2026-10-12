@@ -12,13 +12,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.example.tracklayoff.designsystems.AppColors
-import com.example.tracklayoff.designsystems.AppDimens
+import com.example.tracklayoff.core.designsystem.AppDimens
 
 @Composable
 fun EmptyScreen(
@@ -43,7 +43,7 @@ fun EmptyScreen(
                 text = title,
                 fontSize = AppDimens.CompanyTitleFontSize,
                 fontWeight = FontWeight.Bold,
-                color = AppColors.CompanyNameTextColor,
+                color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center
             )
 
@@ -52,7 +52,7 @@ fun EmptyScreen(
             Text(
                 text = subtitle,
                 fontSize = AppDimens.CompanyLocationFontSize,
-                color = AppColors.CompanyLocationTextColor,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
             )
             if(hasButton) {

@@ -6,12 +6,10 @@ import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import com.example.tracklayoff.designsystems.AppColors
-import com.example.tracklayoff.designsystems.AppDimens
-import com.example.tracklayoff.designsystems.White
+import com.example.tracklayoff.core.designsystem.AppDimens
 
 @Composable
 fun AppSnackBar(snackbarData: SnackbarData) {
@@ -21,8 +19,8 @@ fun AppSnackBar(snackbarData: SnackbarData) {
             vertical = AppDimens.SnackBarPaddingVertical
         ),
         shape = RoundedCornerShape(AppDimens.RoundedCornerShapeSnackBar),
-        containerColor = AppColors.PrimarySnackBarColor,
-        contentColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.inverseSurface,
+        contentColor = MaterialTheme.colorScheme.inverseOnSurface,
         action = snackbarData.visuals.actionLabel?.let { actionText ->
             {
                 TextButton(
@@ -30,7 +28,7 @@ fun AppSnackBar(snackbarData: SnackbarData) {
                 ) {
                     Text(
                         text = actionText,
-                        color = White,
+                        color = MaterialTheme.colorScheme.inverseOnSurface,
                         fontSize = AppDimens.SnackBarFontSize
                     )
                 }
@@ -40,7 +38,7 @@ fun AppSnackBar(snackbarData: SnackbarData) {
         Text(
             text = snackbarData.visuals.message,
             fontSize = AppDimens.SnackBarFontSize,
-            color = Color.White
+            color = MaterialTheme.colorScheme.inverseOnSurface
         )
     }
 }

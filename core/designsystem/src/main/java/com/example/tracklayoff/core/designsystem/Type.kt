@@ -1,4 +1,4 @@
-package com.example.tracklayoff.designsystems
+package com.example.tracklayoff.core.designsystem
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

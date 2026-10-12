@@ -1,98 +1,76 @@
 package com.example.tracklayoff.features.feed.ui.composables
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.tracklayoff.designsystems.AppColors
-import com.example.tracklayoff.designsystems.AppDimens
-import com.example.tracklayoff.designsystems.White
-import com.example.tracklayoff.features.feed.domain.model.Company
+import com.example.tracklayoff.core.designsystem.AppColors
+import com.example.tracklayoff.core.designsystem.AppDimens
+import com.example.tracklayoff.features.feed.ui.state.FeedCardUiModel
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun LayoffCardItem(
     modifier: Modifier = Modifier,
-    company: Company,
+    card: FeedCardUiModel,
     placeholderIcon: Painter
 ) {
     Card(
-        modifier = modifier.fillMaxWidth()
-            .padding(
-                horizontal = AppDimens.HorizontalPaddingLayoffCard,
-                vertical = AppDimens.VerticalPaddingLayoffCard
-            ),
-        colors = CardDefaults.cardColors(containerColor = White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        modifier = modifier.fillMaxWidth().padding(
+            horizontal = AppDimens.HorizontalPaddingLayoffCard,
+            vertical = AppDimens.VerticalPaddingLayoffCard
+        ),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = AppDimens.FeedCardElevation),
         shape = RoundedCornerShape(AppDimens.RoundedCornerShapeLayoffCard),
-        border = BorderStroke(1.dp, White)
+        border = BorderStroke(AppDimens.BorderStrokeLayoffCard, MaterialTheme.colorScheme.outlineVariant)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(AppDimens.HorizontalPaddingLayoffCard),
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            Modifier.padding(AppDimens.LayoffCardContentPadding),
+            verticalArrangement = Arrangement.spacedBy(AppDimens.FeedSectionSpacing)
         ) {
-            AsyncImage(
-                model = company.logoUrl,
-                contentDescription = "${company.companyName} Logo",
-                placeholder = placeholderIcon,
-                fallback = placeholderIcon,
-                error = placeholderIcon,
-                modifier = Modifier
-                    .size(AppDimens.LayoffCardImageSize)
-                    .clip(RoundedCornerShape(AppDimens.SpacingStandard)),
-                contentScale = ContentScale.Crop
-            )
-
-            Spacer(modifier = Modifier.width(AppDimens.SpacingXxl))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = company.companyName,
-                    fontSize = AppDimens.CompanyTitleFontSize,
-                    fontWeight = FontWeight.Bold,
-                    color = AppColors.CompanyNameTextColor
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(AppDimens.CardSpacing)) {
+                AsyncImage(
+                    model = card.logoUrl,
+                    contentDescription = null,
+                    placeholder = placeholderIcon, fallback = placeholderIcon, error = placeholderIcon,
+                    modifier = Modifier.size(AppDimens.LayoffCardImageSize)
+                        .clip(RoundedCornerShape(AppDimens.FeedLogoCornerRadius))
+                        .background(MaterialTheme.colorScheme.surfaceContainer),
+                    contentScale = ContentScale.Fit
                 )
-                Spacer(modifier = Modifier.height(AppDimens.SpacingSmall))
-                Text(
-                    text = company.location,
-                    fontSize = AppDimens.CompanyLocationFontSize,
-                    color = AppColors.CompanyLocationTextColor
-                )
-            }
-
-            Column(horizontalAlignment = Alignment.End) {
-                val status = remember(company.layoffStatus) { company.layoffStatus.toString() }
-                StatusPillComponent(status = status)
-                Spacer(modifier = Modifier.height(AppDimens.SpacingLarge))
-                val impactText = remember(company.impactCount) {
-                    company.impactCount?.let { "$it affected" } ?: "Impact Unknown"
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(AppDimens.SpacingStandard)) {
+                    Text(card.companyName, style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(AppDimens.SpacingStandard)) {
+                        Icon(Icons.Outlined.LocationOn, contentDescription = null,
+                            modifier = Modifier.size(AppDimens.FeedMetadataIconSize), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(card.location, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
                 }
-                Text(
-                    text = impactText,
-                    fontSize = AppDimens.CompanyLocationFontSize,
-                    fontWeight = FontWeight.Bold,
-                    color = if (company.impactCount != null) AppColors.CompanyNameTextColor else AppColors.CompanyLocationTextColor
-                )
+            }
+            Text(card.impactLabel, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold,
+                color = if (card.hasKnownImpact) AppColors.Impact else MaterialTheme.colorScheme.onSurfaceVariant)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(AppDimens.FeedMetadataSpacing),
+                verticalArrangement = Arrangement.spacedBy(AppDimens.FeedMetadataSpacing)) {
+                Surface(shape = RoundedCornerShape(AppDimens.SpacingStandard), color = MaterialTheme.colorScheme.surfaceContainer) {
+                    Text(card.industry, style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier.padding(horizontal = AppDimens.SpacingLarge, vertical = AppDimens.SpacingStandard))
+                }
+                Text(card.reportedDate, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                StatusPillComponent(status = card.status)
             }
         }
     }

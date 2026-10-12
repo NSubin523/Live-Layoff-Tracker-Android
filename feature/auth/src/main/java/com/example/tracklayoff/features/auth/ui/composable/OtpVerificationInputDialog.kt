@@ -19,10 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.example.tracklayoff.core.common.ui.composables.AppAlertDialog
-import com.example.tracklayoff.designsystems.AppDimens.PhoneInputDialogHeight
-import com.example.tracklayoff.designsystems.OtpDialogPlaceHolderText
-import com.example.tracklayoff.designsystems.OtpVerificationButtonText
-import com.example.tracklayoff.designsystems.OtpVerificationHeader
+import com.example.tracklayoff.core.designsystem.AppDimens.PhoneInputDialogHeight
+import com.example.tracklayoff.core.designsystem.OtpDialogPlaceHolderText
+import com.example.tracklayoff.core.designsystem.OtpVerificationButtonText
+import com.example.tracklayoff.core.designsystem.OtpVerificationHeader
 
 const val OTP_LEN = 6
 
