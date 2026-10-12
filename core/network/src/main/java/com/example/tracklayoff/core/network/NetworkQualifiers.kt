@@ -8,7 +8,7 @@ annotation class LayoffTrackerRetrofit
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class FavoritesRetrofit
+annotation class SpringRetrofit
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
@@ -16,4 +16,4 @@ annotation class LayoffTrackerBaseUrl
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class FavoritesBaseUrl
+annotation class SpringBaseUrl

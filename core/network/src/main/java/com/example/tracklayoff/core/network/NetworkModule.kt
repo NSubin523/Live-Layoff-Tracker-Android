@@ -31,8 +31,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    @FavoritesBaseUrl
-    fun provideFavoritesBaseUrl(): String {
+    @SpringBaseUrl
+    fun provideSpringBaseUrl(): String {
         if (!BuildConfig.DEBUG) {
             return BuildConfig.FAVORITES_BASE_URL
         }
@@ -80,8 +80,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    @FavoritesRetrofit
-    fun provideFavoritesRetrofit(@FavoritesBaseUrl baseUrl: String, okHttpClient: OkHttpClient): Retrofit {
+    @SpringRetrofit
+    fun provideSpringRetrofit(@SpringBaseUrl baseUrl: String, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)

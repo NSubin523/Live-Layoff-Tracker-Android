@@ -1,6 +1,6 @@
 package com.example.tracklayoff.features.feed.di
 
-import com.example.tracklayoff.core.network.LayoffTrackerRetrofit
+import com.example.tracklayoff.core.network.SpringRetrofit
 import com.example.tracklayoff.features.feed.data.remote.FeedApiService
 import dagger.Module
 import dagger.Provides
@@ -15,7 +15,7 @@ object FeedNetworkModule {
 
     @Provides
     @Singleton
-    fun provideFeedApiService(@LayoffTrackerRetrofit retrofit: Retrofit): FeedApiService {
+    fun provideFeedApiService(@SpringRetrofit retrofit: Retrofit): FeedApiService {
         return retrofit.create(FeedApiService::class.java)
     }
 }
