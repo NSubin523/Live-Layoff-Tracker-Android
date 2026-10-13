@@ -1,7 +1,6 @@
 package com.example.tracklayoff.core.network
 
 import com.example.tracklayoff.core.network.BuildConfig
-import com.example.tracklayoff.core.common.util.DeviceDetector
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.Module
@@ -23,20 +22,14 @@ object NetworkModule {
     @Singleton
     @LayoffTrackerBaseUrl
     fun provideLayoffTrackerBaseUrl(): String {
-        if (!BuildConfig.DEBUG) {
-            return BuildConfig.BASE_URL
-        }
-        return DeviceDetector.getDynamicBaseUrl(BuildConfig.MAC_IP, port = 8000)
+        return BuildConfig.BASE_URL
     }
 
     @Provides
     @Singleton
     @SpringBaseUrl
     fun provideSpringBaseUrl(): String {
-        if (!BuildConfig.DEBUG) {
-            return BuildConfig.FAVORITES_BASE_URL
-        }
-        return DeviceDetector.getDynamicBaseUrl(BuildConfig.MAC_IP, port = 8081)
+        return BuildConfig.FAVORITES_BASE_URL
     }
 
     @Provides
