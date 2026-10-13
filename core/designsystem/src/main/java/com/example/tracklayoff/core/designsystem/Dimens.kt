@@ -69,6 +69,8 @@ object AppDimens {
     //Phone Input Dialog
     val PhoneInputDialogHeight = 16.dp
 
+    val FavoriteIconSize = 24.dp
+
     // Chat layout tokens
     val ChatHorizontalPadding = 16.dp
     val ChatVerticalPadding = SpacingXxl

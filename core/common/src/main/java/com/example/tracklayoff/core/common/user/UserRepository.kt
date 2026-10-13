@@ -14,10 +14,10 @@ const val NON_USER_ID = "NON-USER"
 class UserRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth
 ) : UserSession {
-    override fun currentUserId(): String? = firebaseAuth.currentUser?.uid
+    override fun currentUserId(): String? = firebaseAuth.currentUser?.takeUnless { it.isAnonymous }?.uid
 
     override val userIds: Flow<String?> = callbackFlow {
-        val listener = FirebaseAuth.AuthStateListener { trySend(it.currentUser?.uid) }
+        val listener = FirebaseAuth.AuthStateListener { trySend(it.currentUser?.takeUnless { user -> user.isAnonymous }?.uid) }
         firebaseAuth.addAuthStateListener(listener)
         awaitClose { firebaseAuth.removeAuthStateListener(listener) }
     }

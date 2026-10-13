@@ -13,6 +13,8 @@ import com.example.tracklayoff.feature.feed.R
 import com.example.tracklayoff.core.common.ui.composables.AppLazyColumn
 import com.example.tracklayoff.core.common.ui.composables.AppLoadingOverlay
 import com.example.tracklayoff.core.common.ui.composables.EmptyScreen
+import com.example.tracklayoff.features.feed.ui.state.FeedFavoritesUiState
+import com.example.tracklayoff.features.feed.ui.state.FavoriteCardUiState
 import com.example.tracklayoff.features.feed.ui.state.FeedUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -22,7 +24,9 @@ fun FeedContent(
     modifier: Modifier = Modifier,
     isRefreshing: Boolean,
     pullToRefreshState: PullToRefreshState,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    favorites: FeedFavoritesUiState = FeedFavoritesUiState(),
+    onFavoriteClick: (String) -> Unit = {}
 ) {
     PullToRefreshBox(
         isRefreshing = isRefreshing,
@@ -58,7 +62,9 @@ fun FeedContent(
                             )
                         }
                     ) { company ->
-                        LayoffCardItem(card = company, placeholderIcon = placeholderIcon)
+                        LayoffCardItem(card = company, placeholderIcon = placeholderIcon,
+                            favorite = favorites.cards[company.id] ?: FavoriteCardUiState(),
+                            onFavoriteClick = { onFavoriteClick(company.id) })
                     }
                 }
             }

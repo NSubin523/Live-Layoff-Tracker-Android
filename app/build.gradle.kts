@@ -71,6 +71,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.hilt.work)
+    implementation(project(":core:favorites"))
     // Project Sub-Modules
     implementation(project(":core:designsystem"))
     implementation(project(":core:common"))

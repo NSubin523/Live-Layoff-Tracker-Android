@@ -15,6 +15,9 @@ import com.example.tracklayoff.core.designsystem.TrackLayoffTheme
 import com.example.tracklayoff.features.feed.domain.model.*
 import com.example.tracklayoff.features.feed.ui.composables.FeedContent
 import com.example.tracklayoff.features.feed.ui.state.FeedUiState
+import com.example.tracklayoff.features.feed.ui.state.FeedFavoritesUiState
+import com.example.tracklayoff.features.feed.ui.state.FavoriteCardUiState
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
 import org.junit.Test
@@ -39,12 +42,14 @@ class FeedThemeTest {
             TrackLayoffTheme(darkTheme = dark) {
                 CompositionLocalProvider(LocalDensity provides Density(LocalDensity.current.density, fontScale)) {
                     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                        FeedContent(state, Modifier.fillMaxSize(), false, rememberPullToRefreshState(), {})
+                        FeedContent(state, Modifier.fillMaxSize(), false, rememberPullToRefreshState(), {},
+                            favorites = FeedFavoritesUiState("test-user", persistentMapOf("1" to FavoriteCardUiState(isSaved = true))))
                     }
                 }
             }
         }
         compose.onNodeWithText("TechCorp").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Unsave TechCorp").assertIsOn().assertIsDisplayed()
         compose.onNodeWithText("1,200 affected").assertIsDisplayed()
         compose.onNodeWithText("CONFIRMED").assertIsDisplayed()
         if (fontScale == 1f) {
