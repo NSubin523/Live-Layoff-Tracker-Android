@@ -6,6 +6,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.state.ToggleableState
+import com.example.tracklayoff.feature.feed.R
+import com.example.tracklayoff.features.feed.ui.state.FavoriteCardUiState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,7 +34,9 @@ import com.example.tracklayoff.features.feed.ui.state.FeedCardUiModel
 fun LayoffCardItem(
     modifier: Modifier = Modifier,
     card: FeedCardUiModel,
-    placeholderIcon: Painter
+    placeholderIcon: Painter,
+    favorite: FavoriteCardUiState = FavoriteCardUiState(),
+    onFavoriteClick: () -> Unit = {}
 ) {
     Card(
         modifier = modifier.fillMaxWidth().padding(
@@ -59,6 +71,23 @@ fun LayoffCardItem(
                         Text(card.location, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
+                val heartColor by animateColorAsState(
+                    if (favorite.isSaved) AppColors.Impact else MaterialTheme.colorScheme.onSurfaceVariant,
+                    label = "Favorite color"
+                )
+                IconButton(onClick = onFavoriteClick, enabled = !favorite.isWriting,
+                    modifier = Modifier.align(Alignment.Top).semantics {
+                        toggleableState = if (favorite.isSaved) ToggleableState.On else ToggleableState.Off
+                    }) {
+                    Icon(if (favorite.isSaved) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                        contentDescription = stringResource(if (favorite.isSaved) R.string.favorite_unsave else R.string.favorite_save, card.companyName),
+                        tint = heartColor, modifier = Modifier.size(AppDimens.FavoriteIconSize))
+                }
+            }
+            if (favorite.sync == com.example.tracklayoff.core.favorites.domain.FavoriteSyncState.Failed ||
+                favorite.sync == com.example.tracklayoff.core.favorites.domain.FavoriteSyncState.AuthenticationRequired) {
+                Text(stringResource(R.string.favorite_sync_failed), style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error)
             }
             Text(card.impactLabel, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold,
                 color = if (card.hasKnownImpact) AppColors.Impact else MaterialTheme.colorScheme.onSurfaceVariant)

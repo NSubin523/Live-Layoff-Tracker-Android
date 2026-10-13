@@ -29,6 +29,9 @@ android {
 }
 
 dependencies {
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.kotlinx.coroutines.test)
     api(project(":core:designsystem"))
 
     implementation(platform(libs.androidx.compose.bom))

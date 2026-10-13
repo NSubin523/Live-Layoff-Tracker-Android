@@ -192,7 +192,7 @@ fun LandingScreen(
                     }
                 }
                 BottomNavItem.Feed -> {
-                    FeedScreen(snackBarHostState = snackBarHostState,)
+                    FeedScreen(snackBarHostState = snackBarHostState, onSignInClick = { showSignInSheet = true })
                 }
 
                 BottomNavItem.Tracker -> {

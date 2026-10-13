@@ -10,6 +10,9 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import com.example.tracklayoff.features.feed.domain.model.*
 import com.example.tracklayoff.features.feed.ui.composables.FeedContent
 import com.example.tracklayoff.features.feed.ui.state.FeedUiState
+import com.example.tracklayoff.features.feed.ui.state.FeedFavoritesUiState
+import com.example.tracklayoff.features.feed.ui.state.FavoriteCardUiState
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Assert.*
 import org.junit.Rule
@@ -46,5 +49,19 @@ class FeedContentTest {
         compose.setContent { MaterialTheme { FeedContent(FeedUiState.Loading, Modifier, false, rememberPullToRefreshState(), {}) } }
         compose.onNodeWithText("No companies found").assertDoesNotExist()
         compose.onNode(hasProgressBarRangeInfo(androidx.compose.ui.semantics.ProgressBarRangeInfo.Indeterminate)).assertIsDisplayed()
+    }
+    @Test fun favoriteButtonReflectsStateAndInvokesCompanyCallback() {
+        var clicked: String? = null
+        val favorite = mutableStateOf(FavoriteCardUiState())
+        compose.setContent { MaterialTheme {
+            FeedContent(FeedUiState.Success(persistentListOf(company)), Modifier, false, rememberPullToRefreshState(), {},
+                favorites = FeedFavoritesUiState("a", persistentMapOf("1" to favorite.value)),
+                onFavoriteClick = { clicked = it })
+        } }
+        compose.onNodeWithContentDescription("Save Acme").assertIsOff().performClick()
+        compose.runOnIdle { assertEquals("1", clicked); favorite.value = FavoriteCardUiState(isSaved = true) }
+        compose.onNodeWithContentDescription("Unsave Acme").assertIsOn().assertIsEnabled()
+        compose.runOnIdle { favorite.value = favorite.value.copy(isWriting = true) }
+        compose.onNodeWithContentDescription("Unsave Acme").assertIsNotEnabled()
     }
 }

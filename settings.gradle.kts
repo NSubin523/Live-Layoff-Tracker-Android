@@ -35,3 +35,5 @@ include(":feature:reporting")
 include(":feature:notifications")
 
 include(":feature:chat-ai")
+
+include(":core:favorites")
