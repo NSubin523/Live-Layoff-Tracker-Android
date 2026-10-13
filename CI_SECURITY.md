@@ -16,3 +16,18 @@ normal UI, database, and worker tests still run. CI APKs are validation builds.
 Main requires PRs, zero approvals, CI gate from GitHub Actions, an up-to-date
 branch, and resolved conversations. No bypass actors, force pushes or deletion.
 Dependabot proposes weekly Gradle and action updates into develop.
+
+Android Studio's Build Variants selector controls the endpoints in core:network.
+Debug uses the hosted dev services on physical devices and emulators:
+
+- Chat: https://layoff-chat-dev-241672723896.us-east4.run.app/api/v1/
+- Feed, favorites, telemetry: https://layoff-api-dev-241672723896.us-east4.run.app/api/v1/
+
+Release endpoints remain empty until production is configured. No environment
+popup, debug badge, or icon change is added. MAC_IP/local-device detection no
+longer controls networking. Keep core:network on the matching build variant.
+
+CI passes -PciBuild=true so test APKs use a closed local port instead of live
+dev services. This property is for automated tests; normal debug builds use
+the URLs above. Keep your real google-services.json for local Firebase testing;
+the generated fake CI config must never be used for app distribution.

@@ -16,4 +16,3 @@ if target.exists():
     raise SystemExit('Refusing to replace existing Firebase configuration')
 target.parent.mkdir(parents=True, exist_ok=True)
 target.write_text(json.dumps(config))
-(root / 'local.properties').write_text('MAC_IP="127.0.0.1"\n')
