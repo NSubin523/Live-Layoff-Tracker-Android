@@ -57,7 +57,7 @@ jobs:
           arch: x86_64
           target: google_apis
           disable-animations: true
-          script: ./gradlew -PciBuild=true --no-daemon --max-workers=2 connectedDebugAndroidTest
+          script: python3 scripts/run_android_tests.py
       - name: Save emulator reports
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
@@ -66,6 +66,7 @@ jobs:
           path: |
             **/build/reports/androidTests/
             **/build/outputs/androidTest-results/
+            build/reports/emulator/
           retention-days: 7
   vulnerabilities:
     name: Runtime dependency vulnerabilities

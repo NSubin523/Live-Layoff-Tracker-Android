@@ -8,7 +8,8 @@ config = {
                      'storage_bucket': 'layoff-ci-only.invalid'},
     'client': [{'client_info': {'mobilesdk_app_id': '1:123456789012:android:0000000000000000',
                                'android_client_info': {'package_name': 'com.example.tracklayoff'}},
-                'oauth_client': [], 'api_key': [{'current_key': 'ci-placeholder-not-a-real-api-key'}]}],
+                # Matches Firebase's local format checks, but is not a real key.
+                'oauth_client': [], 'api_key': [{'current_key': 'A' + '0' * 38}]}],
     'configuration_version': '1',
 }
 target = root / 'app/src/debug/google-services.json'
