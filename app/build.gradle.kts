@@ -1,4 +1,3 @@
-import java.util.Properties
 
 // App-level build.gradle.kts
 plugins {
@@ -12,14 +11,6 @@ plugins {
     alias(libs.plugins.room.compiler.plugin)
 }
 
-val localProperties = Properties().apply {
-    val file = rootProject.file("local.properties")
-    if(file.exists()) {
-        load(file.inputStream())
-    }
-}
-val physicalMacIp = localProperties.getProperty("MAC_IP")
-
 android {
     namespace = "com.example.tracklayoff"
     compileSdk = 35
@@ -32,22 +23,15 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "MAC_IP", "$physicalMacIp")
     }
 
     buildTypes {
-        debug {
-            buildConfigField("String", "BASE_URL", "\"http://192.168.1.149:8000/api/v1/\"")
-            buildConfigField("String", "FAVORITES_BASE_URL", "\"http://192.168.1.149:8081/api/v1/\"")
-        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "")
-            buildConfigField("String", "FAVORITES_BASE_URL", "")
         }
     }
 

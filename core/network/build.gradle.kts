@@ -1,4 +1,3 @@
-import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.library)
@@ -7,13 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.ksp)
 }
 
-val localProperties = Properties().apply {
-    val file = rootProject.file("local.properties")
-    if(file.exists()) {
-        load(file.inputStream())
-    }
-}
-val physicalMacIp = localProperties.getProperty("MAC_IP")
+val isCiBuild = providers.gradleProperty("ciBuild").map(String::toBoolean).getOrElse(false)
 
 android {
     namespace = "com.example.tracklayoff.core.network"
@@ -21,13 +14,12 @@ android {
 
     defaultConfig {
         minSdk = 26
-        buildConfigField("String", "MAC_IP", "$physicalMacIp")
     }
 
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"http://192.168.1.149:8000/api/v1/\"")
-            buildConfigField("String", "FAVORITES_BASE_URL", "\"http://192.168.1.149:8081/api/v1/\"")
+            buildConfigField("String", "BASE_URL", if (isCiBuild) "\"http://127.0.0.1:9/api/v1/\"" else "\"https://layoff-chat-dev-241672723896.us-east4.run.app/api/v1/\"")
+            buildConfigField("String", "FAVORITES_BASE_URL", if (isCiBuild) "\"http://127.0.0.1:9/api/v1/\"" else "\"https://layoff-api-dev-241672723896.us-east4.run.app/api/v1/\"")
         }
         release {
             buildConfigField("String", "BASE_URL", "\"\"")
